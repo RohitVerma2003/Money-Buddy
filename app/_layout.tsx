@@ -1,6 +1,7 @@
 import { AuthProvider } from "@/context/authContext.js";
 import { CurrencyProvider } from "@/context/currencyContext.js";
 import { InternetProvider } from "@/context/internetContext.js";
+import { TransactionProvider } from "@/context/transactionContext.js";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
@@ -17,12 +18,22 @@ export default function RootLayout() {
       <AuthProvider>
         <InternetProvider>
           <CurrencyProvider>
-          <Stack screenOptions={{ headerShown: false }}>
-            <Stack.Screen
-              name="(modals)/EditProfile"
-              options={{ presentation: "modal" }}
-            />
-          </Stack>
+            <TransactionProvider>
+              <Stack screenOptions={{ headerShown: false }}>
+                <Stack.Screen
+                  name="(modals)/EditProfile"
+                  options={{ presentation: "modal" }}
+                />
+                <Stack.Screen
+                  name="(modals)/AddTransaction"
+                  options={{ presentation: "modal" }}
+                />
+                <Stack.Screen
+                  name="(modals)/RegularTransaction"
+                  options={{ presentation: "modal" }}
+                />
+              </Stack>
+            </TransactionProvider>
           </CurrencyProvider>
         </InternetProvider>
       </AuthProvider>

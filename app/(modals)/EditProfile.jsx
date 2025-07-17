@@ -22,7 +22,6 @@ const EditProfile = () => {
   const router = useRouter()
 
   const signupSchema = Yup.object().shape({
-    email: Yup.string().email('Invalid Email').required('Required'),
     name: Yup.string()
       .min(5, 'Too Short')
       .max(20, 'Too Long')
@@ -30,8 +29,8 @@ const EditProfile = () => {
   })
 
   const handleSubmit = async values => {
-    if(loading) return;
-    if(!values.name || !values.email) return;
+    if (loading) return
+    if (!values.name) return
     setLoading(true)
     const uid = user?.uid
     const result = await updateUserProfile(uid, values)
@@ -42,22 +41,21 @@ const EditProfile = () => {
     } else {
       Alert.alert('Error', result?.message)
     }
-    setLoading(true)
+    setLoading(false)
   }
 
   return (
     <ScreenWrapper>
-      <Header/>
+      <Header />
       <View className='flex-1 mt-2'>
         <Text className='text-3xl font-flap-stick'>Edit Profile</Text>
         <View className='mt-10'>
           <Formik
-            initialValues={{ name: user?.name || '', email: user?.email || '' }}
+            initialValues={{ name: user?.name || '' }}
             validationSchema={signupSchema}
             onSubmit={values => {
               const trimmedValues = {
-                name: values.name.trim(),
-                email: values.email.trim()
+                name: values.name.trim()
               }
               handleSubmit(trimmedValues)
             }}
@@ -85,23 +83,6 @@ const EditProfile = () => {
                 {errors.name && touched.name ? (
                   <Text className='text-xs font-doodle text-red-600'>
                     {errors.name}
-                  </Text>
-                ) : null}
-
-                <View className='flex flex-row items-center gap-1 mt-5'>
-                  <Ionicons name='lock-closed' size={25} />
-                  <Text className='font-doodle text-lg'>Email</Text>
-                </View>
-                <TextInput
-                  className='w-full h-16 border-2 rounded-md bg-light-green font-doodle text-lg'
-                  onChangeText={handleChange('email')}
-                  onBlur={handleBlur('email')}
-                  value={values.email}
-                />
-
-                {errors.email && touched.email ? (
-                  <Text className='text-xs font-doodle text-red-600'>
-                    {errors.email}
                   </Text>
                 ) : null}
 
