@@ -13,28 +13,21 @@ import {
 } from 'react-native'
 import useCurrency from '../../context/currencyContext'
 import useTransactions from '../../context/transactionContext'
-import DropDown from '../components/DropDown'
 import Header from '../components/Header'
-import transactionConst from '../constants/transactions'
 import useTransactionService from '../services/transactionService'
 import ScreenWrapper from '../utilities/ScreenWrapper'
 
-const transactionType = transactionConst?.transactionType
-const transactionCategories = transactionConst?.transactionCategories
-
-const RegularTransaction = () => {
+const LendMoneyTransaction = () => {
   const { data, handleChange, handleReset } = useTransactions()
-  const { regularExpenseTransactionService } = useTransactionService()
+  const { lendingMoneyTransactionService } = useTransactionService()
   const { currency } = useCurrency()
   const router = useRouter()
 
   const [isFocus, setIsFocus] = useState(false)
   const [openCalendar, setOpenCalendar] = useState(false)
   const [amount, setAmount] = useState('0')
-  const [error, setError] = useState({ amount: null, category: null })
+  const [error, setError] = useState({ amount: null, lendingTo: null })
   const [loading, setLoading] = useState(false)
-
-  console.log(data)
 
   const isValidAmount = () => {
     if (amount === '') return false
@@ -74,18 +67,23 @@ const RegularTransaction = () => {
 
     const formattedValue = handleBlurAmount()
 
-    if (!formattedValue) {
+    if (!formattedValue || formattedValue <= 0) {
+      if (formattedValue <= 0)
+        setError(prev => ({ ...prev, amount: 'Please add some amount...' }))
       setLoading(false)
       return
     }
 
-    if (data?.category === '') {
-      setError(prev => ({ ...prev, category: 'Select a category' }))
+    if (data?.lendingTo === '') {
+      setError(prev => ({
+        ...prev,
+        lendingTo: 'This field cannot be empty...'
+      }))
       setLoading(false)
       return
     }
 
-    const result = await regularExpenseTransactionService(formattedValue)
+    const result = await lendingMoneyTransactionService(formattedValue)
 
     if (result.success) {
       console.log(result)
@@ -109,7 +107,7 @@ const RegularTransaction = () => {
 
   return (
     <>
-      <Header heading='Regular Transaction' />
+      <Header heading='Lending Money' />
       <ScreenWrapper>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View className='w-full h-full'>
@@ -135,68 +133,20 @@ const RegularTransaction = () => {
             )}
 
             <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
-              <Ionicons name='swap-vertical' size={25} />
-              <Text className='font-doodle text-lg'>Type</Text>
-            </View>
-            <DropDown
-              data={transactionType}
-              search={false}
-              value={data?.type}
-              isFocus={isFocus}
-              setIsFocus={setIsFocus}
-              handleChange={item => {
-                handleChange('type', item.value)
-                setIsFocus(false)
-              }}
-              renderItem={(item, selected) => (
-                <View className='border-b-2 bg-light-green'>
-                  <Text className='font-doodle p-2 my-2 text-lg'>
-                    {item.label}
-                  </Text>
-                </View>
-              )}
-            />
-
-            <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
-              <Ionicons name='pricetag' size={25} />
-              <Text className='font-doodle text-lg'>Category</Text>
+              <Ionicons name='person' size={25} />
+              <Text className='font-doodle text-lg'>Lending to</Text>
             </View>
 
-            <DropDown
-              data={transactionCategories}
-              search={false}
-              isFocus={isFocus}
-              setIsFocus={setIsFocus}
-              handleChange={item => {
-                handleChange('category', item.value)
-                setError(prev => ({ ...prev, category: null }))
-                setIsFocus(false)
-              }}
-              renderLeftIcon={() => {
-                const selected = transactionCategories.find(
-                  cat => cat.value === data?.category
-                )
-                return selected ? (
-                  <Ionicons
-                    name={selected.icon}
-                    size={24}
-                    style={{ marginRight: 10 }}
-                  />
-                ) : null
-              }}
-              renderItem={(item, selected) => (
-                <View className='border-b-2 flex flex-row gap-2 px-2 items-center bg-light-green'>
-                  <Ionicons name={item.icon} size={30} />
-                  <Text className='font-doodle p-2 my-2 text-lg'>
-                    {item.label}
-                  </Text>
-                </View>
-              )}
+            <TextInput
+              className='w-full h-16 border-2 rounded-md bg-light-green font-doodle text-xl'
+              value={data?.lendingTo}
+              onChangeText={e => handleChange('lendingTo', e)}
+              maxLength={20}
             />
 
-            {error.category && (
+            {error.lendingTo && (
               <Text className='text-sm text-red-600 font-doodle'>
-                {error.category}
+                {error.lendingTo}
               </Text>
             )}
 
@@ -216,7 +166,7 @@ const RegularTransaction = () => {
 
             <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
               <Ionicons name='calendar' size={25} />
-              <Text className='font-doodle text-lg'>Date</Text>
+              <Text className='font-doodle text-lg'>Date of lending</Text>
             </View>
 
             <TouchableOpacity
@@ -262,4 +212,4 @@ const RegularTransaction = () => {
   )
 }
 
-export default RegularTransaction
+export default LendMoneyTransaction

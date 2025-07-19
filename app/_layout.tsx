@@ -5,6 +5,7 @@ import { TransactionProvider } from "@/context/transactionContext.js";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import Toast from 'react-native-toast-message';
 import "../global.css";
 
 export default function RootLayout() {
@@ -32,11 +33,20 @@ export default function RootLayout() {
                   name="(modals)/RegularTransaction"
                   options={{ presentation: "modal" }}
                 />
+                <Stack.Screen
+                  name="(modals)/LendMoney"
+                  options={{ presentation: "modal" }}
+                />
+                <Stack.Screen
+                  name="(modals)/DebtMoney"
+                  options={{ presentation: "modal" }}
+                />
               </Stack>
             </TransactionProvider>
           </CurrencyProvider>
         </InternetProvider>
       </AuthProvider>
+      <Toast/>
     </SafeAreaProvider>
   );
 }

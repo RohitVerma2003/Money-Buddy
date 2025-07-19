@@ -10,6 +10,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native'
+import useCurrency from '../../context/currencyContext'
 import useTransactions from '../../context/transactionContext'
 import DropDown from '../components/DropDown'
 import Header from '../components/Header'
@@ -18,12 +19,12 @@ import transactionConst from '../constants/transactions'
 import useTransactionService from '../services/transactionService'
 import ScreenWrapper from '../utilities/ScreenWrapper'
 
-const transactionType = transactionConst?.transactionType
 const transactionCategories = transactionConst?.transactionCategories
 
 const SplitTransaction = () => {
   const { data, handleChange, handleReset } = useTransactions()
   const { sharedExpenseTransactionService } = useTransactionService()
+  const { currency } = useCurrency()
   const router = useRouter()
 
   const [isFocus, setIsFocus] = useState(false)
@@ -125,185 +126,194 @@ const SplitTransaction = () => {
       console.log(result)
       handleReset()
       router.back()
+      Toast.show({
+        type: 'success',
+        text1: 'Transaction Added Succesfully'
+      })
     } else {
       Alert.alert('Error', result.error)
+      Toast.show({
+        type: 'error',
+        text1: 'Some error occured',
+        text2: 'Try again later'
+      })
     }
 
     setLoading(false)
   }
 
   return (
-    <ScreenWrapper>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        <Header />
-        <View className='mt-3'>
-          <Text className='w-full font-flap-stick text-3xl mb-5'>
-            Split Transaction
-          </Text>
-        </View>
-
-        <View className='w-full h-full'>
-          {/* Total Amount Section */}
-          <View className='flex flex-row items-center gap-1 mb-2'>
-            <Ionicons name='cash' size={25} />
-            <Text className='font-doodle text-lg'>Total Amount</Text>
-          </View>
-          <TextInput
-            className='w-full h-16 border-2 rounded-md bg-light-green font-doodle text-xl'
-            keyboardType='decimal-pad'
-            value={amount}
-            onChangeText={e => {
-              handleAmountChange(e)
-              setError(prev => ({ ...prev, amount: null }))
-            }}
-            onBlur={handleBlurAmount}
-          />
-
-          {error.amount && (
-            <Text className='text-sm text-red-600 font-doodle'>
-              {error.amount}
-            </Text>
-          )}
-
-          {/* Category Section */}
-          <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
-            <Ionicons name='pricetag' size={25} />
-            <Text className='font-doodle text-lg'>Category</Text>
-          </View>
-
-          <DropDown
-            data={transactionCategories}
-            search={false}
-            isFocus={isFocus}
-            setIsFocus={setIsFocus}
-            handleChange={item => {
-              handleChange('category', item.value)
-              setError(prev => ({ ...prev, category: null }))
-              setIsFocus(false)
-            }}
-            renderLeftIcon={() => {
-              const selected = transactionCategories.find(
-                cat => cat.value === data?.category
-              )
-              return selected ? (
-                <Ionicons
-                  name={selected.icon}
-                  size={24}
-                  style={{ marginRight: 10 }}
-                />
-              ) : null
-            }}
-            renderItem={(item, selected) => (
-              <View className='border-b-2 flex flex-row gap-2 px-2 items-center bg-light-green'>
-                <Ionicons name={item.icon} size={30} />
-                <Text className='font-doodle p-2 my-2 text-lg'>
-                  {item.label}
-                </Text>
-              </View>
-            )}
-          />
-
-          {error.category && (
-            <Text className='text-sm text-red-600 font-doodle'>
-              {error.category}
-            </Text>
-          )}
-
-          {/* Descripiton Section  */}
-
-          <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
-            <Ionicons name='document' size={25} />
-            <Text className='font-doodle text-lg'>
-              Descripiton <Text className='text-sm'>(Optional)</Text>
-            </Text>
-          </View>
-
-          <TextInput
-            className='w-full h-16 border-2 rounded-md bg-light-green font-doodle text-xl'
-            value={data?.description}
-            onChangeText={e => handleChange('description', e)}
-            maxLength={100}
-          />
-
-          {/* Date Section */}
-
-          <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
-            <Ionicons name='calendar' size={25} />
-            <Text className='font-doodle text-lg'>Date</Text>
-          </View>
-
-          {/* Calendar Section */}
-
-          <TouchableOpacity
-            className='w-full h-16 border-2 rounded-md bg-light-green font-doodle text-xl flex justify-center p-2'
-            onPress={() => setOpenCalendar(!openCalendar)}
-          >
-            <Text className='font-doodle text-lg'>{data?.date.toString()}</Text>
-          </TouchableOpacity>
-
-          {openCalendar && (
-            <View className='w-full'>
-              <DateTimePicker
-                value={data?.date}
-                mode='date'
-                display='calendar'
-                onChange={(e, date) => {
-                  handleChange('date', date)
-                  setOpenCalendar(false)
-                }}
-              />
+    <>
+      <Header heading='Split Transaction' />
+      <ScreenWrapper>
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <View className='w-full h-full'>
+            {/* Total Amount Section */}
+            <View className='flex flex-row items-center gap-1 mb-2'>
+              <Ionicons name='cash' size={25} />
+              <Text className='font-doodle text-lg'>
+                Total Amount ({currency})
+              </Text>
             </View>
-          )}
+            <TextInput
+              className='w-full h-16 border-2 rounded-md bg-light-green font-doodle text-xl'
+              keyboardType='decimal-pad'
+              value={amount}
+              onChangeText={e => {
+                handleAmountChange(e)
+                setError(prev => ({ ...prev, amount: null }))
+              }}
+              onBlur={handleBlurAmount}
+            />
 
-          {/* Shared People Section */}
-
-          <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
-            <Ionicons name='people' size={25} />
-            <Text className='font-doodle text-lg'>Shared People</Text>
-          </View>
-
-          <View className='w-full flex justify-center gap-2 mb-2'>
-            <View className='w-full flex flex-row gap-2 justify-between'>
-              <View className='w-2/5 bg-light-green border-2 rounded-md h-16 flex justify-center p-2'>
-                <Text className='text-lg font-doodle'>You</Text>
-              </View>
-              <View className='w-2/5 bg-light-green border-2 rounded-md h-16 flex justify-center p-2'>
-                <Text className='text-lg font-doodle'>
-                  {calculateUserAmount()}
-                </Text>
-              </View>
-            </View>
-            {error.userAmount && (
+            {error.amount && (
               <Text className='text-sm text-red-600 font-doodle'>
-                {error.userAmount}
+                {error.amount}
               </Text>
             )}
-            {error.share && (
-              <Text className='text-sm text-red-600 font-doodle'>
-                {error.share}
-              </Text>
-            )}
-          </View>
-          <SplitForm />
 
-          {/* Submit Button */}
+            {/* Category Section */}
+            <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
+              <Ionicons name='pricetag' size={25} />
+              <Text className='font-doodle text-lg'>Category</Text>
+            </View>
 
-          <View className='w-full flex justify-center items-center mb-3 relative mt-3'>
-            <View className='w-full h-16 flex justify-center items-center border-2 rounded-md bg-black absolute left-1 top-1' />
-            <TouchableOpacity
-              className='w-full h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange'
-              onPress={handleSubmit}
-            >
-              {loading ? (
-                <ActivityIndicator />
-              ) : (
-                <Text className='font-flap-stick text-xl'>Submit</Text>
+            <DropDown
+              data={transactionCategories}
+              search={false}
+              isFocus={isFocus}
+              setIsFocus={setIsFocus}
+              handleChange={item => {
+                handleChange('category', item.value)
+                setError(prev => ({ ...prev, category: null }))
+                setIsFocus(false)
+              }}
+              renderLeftIcon={() => {
+                const selected = transactionCategories.find(
+                  cat => cat.value === data?.category
+                )
+                return selected ? (
+                  <Ionicons
+                    name={selected.icon}
+                    size={24}
+                    style={{ marginRight: 10 }}
+                  />
+                ) : null
+              }}
+              renderItem={(item, selected) => (
+                <View className='border-b-2 flex flex-row gap-2 px-2 items-center bg-light-green'>
+                  <Ionicons name={item.icon} size={30} />
+                  <Text className='font-doodle p-2 my-2 text-lg'>
+                    {item.label}
+                  </Text>
+                </View>
               )}
+            />
+
+            {error.category && (
+              <Text className='text-sm text-red-600 font-doodle'>
+                {error.category}
+              </Text>
+            )}
+
+            {/* Descripiton Section  */}
+
+            <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
+              <Ionicons name='document' size={25} />
+              <Text className='font-doodle text-lg'>
+                Descripiton <Text className='text-sm'>(Optional)</Text>
+              </Text>
+            </View>
+
+            <TextInput
+              className='w-full h-16 border-2 rounded-md bg-light-green font-doodle text-xl'
+              value={data?.description}
+              onChangeText={e => handleChange('description', e)}
+              maxLength={100}
+            />
+
+            {/* Date Section */}
+
+            <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
+              <Ionicons name='calendar' size={25} />
+              <Text className='font-doodle text-lg'>Date</Text>
+            </View>
+
+            {/* Calendar Section */}
+
+            <TouchableOpacity
+              className='w-full h-16 border-2 rounded-md bg-light-green font-doodle text-xl flex justify-center p-2'
+              onPress={() => setOpenCalendar(!openCalendar)}
+            >
+              <Text className='font-doodle text-lg'>
+                {data?.date.toString()}
+              </Text>
             </TouchableOpacity>
+
+            {openCalendar && (
+              <View className='w-full'>
+                <DateTimePicker
+                  value={data?.date}
+                  mode='date'
+                  display='calendar'
+                  onChange={(e, date) => {
+                    handleChange('date', date)
+                    setOpenCalendar(false)
+                  }}
+                />
+              </View>
+            )}
+
+            {/* Shared People Section */}
+
+            <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
+              <Ionicons name='people' size={25} />
+              <Text className='font-doodle text-lg'>Shared People</Text>
+            </View>
+
+            <View className='w-full flex justify-center gap-2 mb-2'>
+              <View className='w-full flex flex-row gap-2 justify-between'>
+                <View className='w-2/5 bg-light-green border-2 rounded-md h-16 flex justify-center p-2'>
+                  <Text className='text-lg font-doodle'>You</Text>
+                </View>
+                <View className='w-2/5 bg-light-green border-2 rounded-md h-16 flex justify-center p-2'>
+                  <Text className='text-lg font-doodle'>
+                    {calculateUserAmount()}
+                  </Text>
+                </View>
+              </View>
+              {error.userAmount && (
+                <Text className='text-sm text-red-600 font-doodle'>
+                  {error.userAmount}
+                </Text>
+              )}
+              {error.share && (
+                <Text className='text-sm text-red-600 font-doodle'>
+                  {error.share}
+                </Text>
+              )}
+            </View>
+            <SplitForm />
+
+            {/* Submit Button */}
+
+            <View className='w-full flex justify-center items-center mb-3 relative mt-3'>
+              <View className='w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-black absolute right-3 top-1' />
+              <TouchableOpacity
+                className='w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange'
+                onPress={handleSubmit}
+              >
+                {loading ? (
+                  <ActivityIndicator />
+                ) : (
+                  <Text className='font-flap-stick text-xl'>Submit</Text>
+                )}
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </ScrollView>
-    </ScreenWrapper>
+        </ScrollView>
+      </ScreenWrapper>
+    </>
   )
 }
 

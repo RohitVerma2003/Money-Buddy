@@ -23,6 +23,20 @@ const useTransactionService = () => {
         sharedAmong: data.friends
     }
 
+    const lendExpense = {
+        kind: 'lend',
+        description: data.description,
+        date: data.date,
+        lendingTo: data.lendingTo
+    }
+
+    const debtExpense = {
+        kind: 'debt',
+        description: data.description,
+        date: data.date,
+        lendingFrom: data.lendingFrom
+    }
+
     const regularExpenseTransactionService = async (amount) => {
         try {
             const newData = { ...regularExpenseData, uid: user?.uid, createdAt: serverTimestamp(), amount: Number(parseFloat(amount).toFixed(2)) }
@@ -46,7 +60,29 @@ const useTransactionService = () => {
         }
     }
 
-    return { regularExpenseTransactionService ,sharedExpenseTransactionService }
+    const lendingMoneyTransactionService = async (amount) => {
+        try {
+            const newData = { ...lendExpense, uid: user?.uid, createdAt: serverTimestamp(), amount: Number(parseFloat(amount).toFixed(2)) }
+            const docRef = doc(collection(firestore, "transactions"))
+            await setDoc(docRef, newData, { merge: true })
+            return { success: true, transaction: { ...newData, id: docRef?.id } }
+        } catch (error) {
+            return { success: false, error: error.message }
+        }
+    }
+
+    const debtMoneyTransactionService = async (amount) => {
+        try {
+            const newData = { ...debtExpense, uid: user?.uid, createdAt: serverTimestamp(), amount: Number(parseFloat(amount).toFixed(2)) }
+            const docRef = doc(collection(firestore, "transactions"))
+            await setDoc(docRef, newData, { merge: true })
+            return { success: true, transaction: { ...newData, id: docRef?.id } }
+        } catch (error) {
+            return { success: false, error: error.message }
+        }
+    }
+
+    return { regularExpenseTransactionService, sharedExpenseTransactionService, lendingMoneyTransactionService, debtMoneyTransactionService }
 }
 
 export default useTransactionService;

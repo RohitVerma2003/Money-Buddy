@@ -3,13 +3,13 @@ import { createContext, useContext, useState } from "react";
 export const TransactionContext = createContext();
 
 export const TransactionProvider = ({ children }) => {
-    const [data, setData] = useState({ amount: 0, type: 'Expense', kind: 'Personal', description: '', date: new Date(), friends: [], category: '' })
+    const [data, setData] = useState({ amount: 0, type: 'Expense', kind: 'Personal', description: '', date: new Date(), friends: [], category: '', lendingTo: '', lendingFrom: '' })
 
     const handleChange = (name, value) => {
         setData((prev) => ({ ...prev, [name]: value }));
     }
 
-    const addFriend = (name , amount) => {
+    const addFriend = (name, amount) => {
         const friends = data.friends;
         friends.push({ name: name, amount: amount })
         setData((prev) => ({ ...prev, friends: friends }));
@@ -33,7 +33,7 @@ export const TransactionProvider = ({ children }) => {
     }
 
     return (
-        <TransactionContext.Provider value={{ data, handleChange, addFriend, changeFriendAmount, deleteFriend , handleReset }}>{children}</TransactionContext.Provider>
+        <TransactionContext.Provider value={{ data, handleChange, addFriend, changeFriendAmount, deleteFriend, handleReset }}>{children}</TransactionContext.Provider>
     )
 }
 
