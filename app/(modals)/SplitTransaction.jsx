@@ -1,10 +1,9 @@
 import { Ionicons } from '@expo/vector-icons'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { useRouter } from 'expo-router'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   ActivityIndicator,
-  Alert,
   ScrollView,
   Text,
   TextInput,
@@ -14,6 +13,7 @@ import {
 import useTransactions from '../../context/transactionContext'
 import DropDown from '../components/DropDown'
 import Header from '../components/Header'
+import SplitForm from '../components/SplitForm'
 import transactionConst from '../constants/transactions'
 import useTransactionService from '../services/transactionService'
 import ScreenWrapper from '../utilities/ScreenWrapper'
@@ -21,18 +21,42 @@ import ScreenWrapper from '../utilities/ScreenWrapper'
 const transactionType = transactionConst?.transactionType
 const transactionCategories = transactionConst?.transactionCategories
 
-const RegularTransaction = () => {
+const SplitTransaction = () => {
   const { data, handleChange, handleReset } = useTransactions()
-  const { regularExpenseTransactionService } = useTransactionService()
+  const { sharedExpenseTransactionService } = useTransactionService()
   const router = useRouter()
 
   const [isFocus, setIsFocus] = useState(false)
   const [openCalendar, setOpenCalendar] = useState(false)
   const [amount, setAmount] = useState('0')
-  const [error, setError] = useState({ amount: null, category: null })
+  const [error, setError] = useState({
+    amount: null,
+    category: null,
+    userAmount: null,
+    share: null
+  })
   const [loading, setLoading] = useState(false)
+  const [totalFriendAmount, setTotalFriendAmount] = useState(0)
 
-  console.log(data)
+  useEffect(() => {
+    let sum = 0
+    data?.friends.map(friend => {
+      sum += Number(friend?.amount)
+    })
+    setTotalFriendAmount(sum)
+  }, [data?.friends?.length])
+
+  const calculateUserAmount = () => {
+    const sharedAmount = parseFloat(totalFriendAmount)
+    const totalAmount = parseFloat(String(amount))
+
+    if (isNaN(totalAmount)) {
+      setError(prev => ({ ...prev, amount: 'Type a valid amount' }))
+      return -1
+    }
+
+    return (totalAmount - sharedAmount).toFixed(2)
+  }
 
   const isValidAmount = () => {
     if (amount === '') return false
@@ -77,13 +101,25 @@ const RegularTransaction = () => {
       return
     }
 
+    if (Number(calculateUserAmount()) < 0) {
+      setError(prev => ({ ...prev, userAmount: 'Not Valid' }))
+      setLoading(false)
+      return
+    }
+
+    if (data?.friends.length === 0) {
+      setError(prev => ({ ...prev, share: 'Add atleast 1 sharing person' }))
+      setLoading(false)
+      return
+    }
+
     if (data?.category === '') {
       setError(prev => ({ ...prev, category: 'Select a category' }))
       setLoading(false)
       return
     }
 
-    const result = await regularExpenseTransactionService(formattedValue)
+    const result = await sharedExpenseTransactionService(formattedValue)
 
     if (result.success) {
       console.log(result)
@@ -102,14 +138,15 @@ const RegularTransaction = () => {
         <Header />
         <View className='mt-3'>
           <Text className='w-full font-flap-stick text-3xl mb-5'>
-            Regular Transaction
+            Split Transaction
           </Text>
         </View>
 
         <View className='w-full h-full'>
+          {/* Total Amount Section */}
           <View className='flex flex-row items-center gap-1 mb-2'>
             <Ionicons name='cash' size={25} />
-            <Text className='font-doodle text-lg'>Amount</Text>
+            <Text className='font-doodle text-lg'>Total Amount</Text>
           </View>
           <TextInput
             className='w-full h-16 border-2 rounded-md bg-light-green font-doodle text-xl'
@@ -128,29 +165,7 @@ const RegularTransaction = () => {
             </Text>
           )}
 
-          <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
-            <Ionicons name='swap-vertical' size={25} />
-            <Text className='font-doodle text-lg'>Type</Text>
-          </View>
-          <DropDown
-            data={transactionType}
-            search={false}
-            value={data?.type}
-            isFocus={isFocus}
-            setIsFocus={setIsFocus}
-            handleChange={item => {
-              handleChange('type', item.value)
-              setIsFocus(false)
-            }}
-            renderItem={(item, selected) => (
-              <View className='border-b-2 bg-light-green'>
-                <Text className='font-doodle p-2 my-2 text-lg'>
-                  {item.label}
-                </Text>
-              </View>
-            )}
-          />
-
+          {/* Category Section */}
           <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
             <Ionicons name='pricetag' size={25} />
             <Text className='font-doodle text-lg'>Category</Text>
@@ -194,6 +209,8 @@ const RegularTransaction = () => {
             </Text>
           )}
 
+          {/* Descripiton Section  */}
+
           <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
             <Ionicons name='document' size={25} />
             <Text className='font-doodle text-lg'>
@@ -208,10 +225,14 @@ const RegularTransaction = () => {
             maxLength={100}
           />
 
+          {/* Date Section */}
+
           <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
             <Ionicons name='calendar' size={25} />
             <Text className='font-doodle text-lg'>Date</Text>
           </View>
+
+          {/* Calendar Section */}
 
           <TouchableOpacity
             className='w-full h-16 border-2 rounded-md bg-light-green font-doodle text-xl flex justify-center p-2'
@@ -234,6 +255,39 @@ const RegularTransaction = () => {
             </View>
           )}
 
+          {/* Shared People Section */}
+
+          <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
+            <Ionicons name='people' size={25} />
+            <Text className='font-doodle text-lg'>Shared People</Text>
+          </View>
+
+          <View className='w-full flex justify-center gap-2 mb-2'>
+            <View className='w-full flex flex-row gap-2 justify-between'>
+              <View className='w-2/5 bg-light-green border-2 rounded-md h-16 flex justify-center p-2'>
+                <Text className='text-lg font-doodle'>You</Text>
+              </View>
+              <View className='w-2/5 bg-light-green border-2 rounded-md h-16 flex justify-center p-2'>
+                <Text className='text-lg font-doodle'>
+                  {calculateUserAmount()}
+                </Text>
+              </View>
+            </View>
+            {error.userAmount && (
+              <Text className='text-sm text-red-600 font-doodle'>
+                {error.userAmount}
+              </Text>
+            )}
+            {error.share && (
+              <Text className='text-sm text-red-600 font-doodle'>
+                {error.share}
+              </Text>
+            )}
+          </View>
+          <SplitForm />
+
+          {/* Submit Button */}
+
           <View className='w-full flex justify-center items-center mb-3 relative mt-3'>
             <View className='w-full h-16 flex justify-center items-center border-2 rounded-md bg-black absolute left-1 top-1' />
             <TouchableOpacity
@@ -253,4 +307,4 @@ const RegularTransaction = () => {
   )
 }
 
-export default RegularTransaction
+export default SplitTransaction

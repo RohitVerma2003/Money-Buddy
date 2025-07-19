@@ -9,9 +9,9 @@ export const TransactionProvider = ({ children }) => {
         setData((prev) => ({ ...prev, [name]: value }));
     }
 
-    const addFriend = (name) => {
+    const addFriend = (name , amount) => {
         const friends = data.friends;
-        friends.push({ name: name, amount: 0 })
+        friends.push({ name: name, amount: amount })
         setData((prev) => ({ ...prev, friends: friends }));
     }
 

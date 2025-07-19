@@ -1,14 +1,14 @@
-import { useRouter } from 'expo-router';
-import { Text, TouchableOpacity, View } from 'react-native';
-import Header from "../components/Header";
-import ScreenWrapper from '../utilities/ScreenWrapper';
+import { useRouter } from 'expo-router'
+import { Text, TouchableOpacity, View } from 'react-native'
+import Header from '../components/Header'
+import ScreenWrapper from '../utilities/ScreenWrapper'
 
 const AddTransaction = () => {
-  const router = useRouter();
+  const router = useRouter()
   return (
     <ScreenWrapper>
-      <Header/>
-      <View className="mt-3">
+      <Header />
+      <View className='mt-3'>
         <Text className='w-full font-flap-stick text-3xl mb-5'>
           Add Transaction
         </Text>
@@ -17,7 +17,9 @@ const AddTransaction = () => {
         <View className='w-full h-16 flex justify-center items-center border-2 rounded-md bg-black absolute left-1 top-1' />
         <TouchableOpacity
           className='w-full h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange'
-          onPress={() => {router.push('/(modals)/RegularTransaction')}}
+          onPress={() => {
+            router.push('/(modals)/RegularTransaction')
+          }}
         >
           <Text className='font-flap-stick text-xl'>Regular Transaction</Text>
         </TouchableOpacity>
@@ -26,7 +28,9 @@ const AddTransaction = () => {
         <View className='w-full h-16 flex justify-center items-center border-2 rounded-md bg-black absolute left-1 top-1' />
         <TouchableOpacity
           className='w-full h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange'
-          onPress={() => {}}
+          onPress={() => {
+            router.push('/(modals)/SplitTransaction')
+          }}
         >
           <Text className='font-flap-stick text-xl'>Split Transaction</Text>
         </TouchableOpacity>

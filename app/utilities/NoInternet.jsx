@@ -1,10 +1,9 @@
 import { Image } from 'expo-image'
 import { Text, View } from 'react-native'
-import ScreenWrapper from './ScreenWrapper'
 
 const NoInternet = () => {
   return (
-    <ScreenWrapper bgColor='red-400' barColor='red-400'>
+    <View className="flex-1 bg-red-400">
       <View className='flex-1 justify-center items-center'>
         <Image source={require('../../assets/Icons/internet.png')} style={{width : 40 , height : 40 , marginBottom : 20}}/>
         <Text className='font-doodle text-white text-2xl'>
@@ -14,7 +13,7 @@ const NoInternet = () => {
           Connect internet to move forward.
         </Text>
       </View>
-    </ScreenWrapper>
+    </View>
   )
 }
 
