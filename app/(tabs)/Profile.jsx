@@ -2,19 +2,20 @@ import { useRouter } from 'expo-router'
 import { Text, TouchableOpacity, View } from 'react-native'
 import Animated, { FadeIn } from 'react-native-reanimated'
 import useAuth from '../../context/authContext'
+import Header from '../components/Header'
 import ProfileImage from '../components/ProfileImage'
+import HeadWrapper from '../utilities/HeadWrapper'
 import ScreenWrapper from '../utilities/ScreenWrapper'
 
 const Profile = () => {
   const { user, logout } = useAuth()
   const router = useRouter()
   return (
+    <HeadWrapper>
+      <Header heading='Profile' isbackButton={false}/>
     <ScreenWrapper>
       <View className='w-full flex-1 items-center'>
-        <View className='w-full'>
-          <Text className='font-flap-stick text-3xl'>Welcome!</Text>
-        </View>
-        <Animated.View className='mt-10' entering={FadeIn.duration(500)}>
+        <Animated.View className='mt-3' entering={FadeIn.duration(500)}>
           <ProfileImage />
           <Text className='text-center mt-1 font-doodle text-3xl'>
             {user?.name}
@@ -59,6 +60,7 @@ const Profile = () => {
         </View>
       </View>
     </ScreenWrapper>
+    </HeadWrapper>
   )
 }
 

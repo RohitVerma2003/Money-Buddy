@@ -17,6 +17,7 @@ import DropDown from '../components/DropDown'
 import Header from '../components/Header'
 import transactionConst from '../constants/transactions'
 import useTransactionService from '../services/transactionService'
+import HeadWrapper from '../utilities/HeadWrapper'
 import ScreenWrapper from '../utilities/ScreenWrapper'
 
 const transactionType = transactionConst?.transactionType
@@ -108,7 +109,7 @@ const RegularTransaction = () => {
   }
 
   return (
-    <>
+    <HeadWrapper>
       <Header heading='Regular Transaction' />
       <ScreenWrapper>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -258,7 +259,7 @@ const RegularTransaction = () => {
           </View>
         </ScrollView>
       </ScreenWrapper>
-    </>
+    </HeadWrapper>
   )
 }
 

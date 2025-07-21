@@ -15,6 +15,7 @@ import useCurrency from '../../context/currencyContext'
 import useTransactions from '../../context/transactionContext'
 import Header from '../components/Header'
 import useTransactionService from '../services/transactionService'
+import HeadWrapper from '../utilities/HeadWrapper'
 import ScreenWrapper from '../utilities/ScreenWrapper'
 
 const LendMoneyTransaction = () => {
@@ -106,7 +107,7 @@ const LendMoneyTransaction = () => {
   }
 
   return (
-    <>
+    <HeadWrapper>
       <Header heading='Lending Money' />
       <ScreenWrapper>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -208,7 +209,7 @@ const LendMoneyTransaction = () => {
           </View>
         </ScrollView>
       </ScreenWrapper>
-    </>
+    </HeadWrapper>
   )
 }
 

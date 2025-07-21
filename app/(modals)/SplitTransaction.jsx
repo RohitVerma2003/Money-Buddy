@@ -17,6 +17,7 @@ import Header from '../components/Header'
 import SplitForm from '../components/SplitForm'
 import transactionConst from '../constants/transactions'
 import useTransactionService from '../services/transactionService'
+import HeadWrapper from '../utilities/HeadWrapper'
 import ScreenWrapper from '../utilities/ScreenWrapper'
 
 const transactionCategories = transactionConst?.transactionCategories
@@ -143,7 +144,7 @@ const SplitTransaction = () => {
   }
 
   return (
-    <>
+    <HeadWrapper>
       <Header heading='Split Transaction' />
       <ScreenWrapper>
         <ScrollView showsVerticalScrollIndicator={false}>
@@ -313,7 +314,7 @@ const SplitTransaction = () => {
           </View>
         </ScrollView>
       </ScreenWrapper>
-    </>
+    </HeadWrapper>
   )
 }
 

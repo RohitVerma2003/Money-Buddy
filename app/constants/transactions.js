@@ -22,7 +22,32 @@ const transactionCategories = [
     { label: "Others", value: "others", icon: "apps" },
 ];
 
+const iconNameMapping = {
+    food_dining: 'fast-food',
+    coffee: 'cafe',
+    groceries: 'cart',
+    transportation: 'car',
+    shopping: 'bag',
+    rent: 'home',
+    utilities: 'flash',
+    health: 'medkit',
+    subscriptions: 'film',
+    travel: 'airplane',
+    education: 'school',
+    entertainment: 'game-controller',
+    gifts: 'gift',
+    savings: 'wallet',
+    investments: 'trending-up',
+    salary: 'cash',
+    freelance: 'laptop',
+    insurance: 'shield-checkmark',
+    donations: 'heart',
+    others: 'apps',
+    lend: 'trending-up',
+    debt: 'trending-down',
+};
 
-const transactionConst = { transactionType , transactionCategories };
+
+const transactionConst = { transactionType, transactionCategories, iconNameMapping };
 
 export default transactionConst;

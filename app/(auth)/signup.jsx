@@ -14,7 +14,7 @@ import {
 } from 'react-native'
 import * as Yup from 'yup'
 import useAuth from '../../context/authContext'
-import Header from '../components/Header.jsx'
+import HeadWrapper from '../utilities/HeadWrapper.jsx'
 import ScreenWrapper from '../utilities/ScreenWrapper.jsx'
 
 const Signup = () => {
@@ -46,12 +46,12 @@ const Signup = () => {
   }
 
   return (
+    <HeadWrapper>
     <ScreenWrapper>
       <ScrollView
         showsVerticalScrollIndicator={false}
         showsHorizontalScrollIndicator={false}
       >
-        <Header />
         <View className='w-full h-full bg-fade-green flex-1 mt-5'>
           <View className='w-full max-h-20 flex-1 justify-center items-center flex-row-reverse'>
             <Image
@@ -158,6 +158,7 @@ const Signup = () => {
         </View>
       </ScrollView>
     </ScreenWrapper>
+    </HeadWrapper>
   )
 }
 
