@@ -28,7 +28,7 @@ const useTransactionService = () => {
                         id: doc.id,
                         ...data,
                         createdAt: data.createdAt?.toDate().toISOString(),
-                        date: data.date?.toDate().toISOString(),
+                        date: data.date?.toDate().toISOString().split("T")[0],
                         sharedAmong: Array.isArray(data.sharedAmong)
                             ? data.sharedAmong.map(person => ({
                                 name: person?.name || '',
@@ -41,7 +41,7 @@ const useTransactionService = () => {
                         id: doc.id,
                         ...data,
                         createdAt: data.createdAt?.toDate().toISOString(),
-                        date: data.date?.toDate().toISOString(),
+                        date: data.date?.toDate().toISOString().split("T")[0],
                     };
                 }
             });

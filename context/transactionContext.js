@@ -11,14 +11,14 @@ export const TransactionProvider = ({ children }) => {
 
     const addFriend = (name, amount) => {
         const friends = data.friends;
-        friends.push({ name: name, amount: amount })
+        friends.push({ name: name, amount: Number(parseFloat(amount).toFixed(2)) })
         setData((prev) => ({ ...prev, friends: friends }));
     }
 
     const changeFriendAmount = (name, amount) => {
         const friends = data.friends;
         const newFriends = friends.filter((friend) => { return friend.name != name });
-        newFriends.push({ name, amount });
+        newFriends.push({ name, amount : Number(parseFloat(amount).toFixed(2)) });
         setData((prev) => ({ ...prev, friends: newFriends }));
     }
 

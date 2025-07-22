@@ -44,6 +44,7 @@ const RecentTransaction = ({ data }) => {
             {getTransactionHeading()}
             {data.kind === 'shared' && ' (shared)'}
           </Text>
+          <Text className="font-doodle text-sm">{data.date}</Text>
           <Text className='font-doodle text-md text-clip line-clamp-1'>
             {data.description}
           </Text>
