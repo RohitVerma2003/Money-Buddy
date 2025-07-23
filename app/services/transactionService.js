@@ -5,6 +5,7 @@ import useAuth from "../../context/authContext";
 import useTransactions from "../../context/transactionContext";
 import monthlyDataStarter from "../utilities/monthlyDataStarter";
 import weeklyDataStarter from "../utilities/weeklyDataStarter";
+import yearlyDataStarter from "../utilities/yearlyDataStarter";
 
 const useTransactionService = () => {
     const { data } = useTransactions();
@@ -216,7 +217,7 @@ const useTransactionService = () => {
                     });
                 }
 
-                const monthName = transactionDate.toLocaleString("default" , {month : "short"})
+                const monthName = transactionDate.toLocaleString("default", { month: "short" })
                 const shortYear = transactionDate.getFullYear().toString().slice(-2)
 
                 const monthData = monthlyData.find((month) => month.month === `${monthName} ${shortYear}`)
@@ -251,7 +252,84 @@ const useTransactionService = () => {
         }
     }
 
-    return { regularExpenseTransactionService, sharedExpenseTransactionService, lendingMoneyTransactionService, debtMoneyTransactionService, weeklyTransactionStats , monthlyTransactionStats }
+    const yearlyTransactionStats = async () => {
+        try {
+            const colRef = collection(firestore, 'transactions')
+
+            const q = query(colRef, where('uid', '==', user.uid), orderBy('date', 'desc'))
+
+            const querySnapshot = await getDocs(q)
+            const transactionData = []
+
+            const firstTransaction = querySnapshot.docs.reduce((earliest, doc) => {
+                const transactionDate = doc.data().date.toDate()
+                return transactionDate < earliest ? transactionDate : earliest
+            }, new Date())
+
+            const firstYear = firstTransaction.getFullYear()
+            const currentYear = new Date().getFullYear()
+
+            const yearlyData = yearlyDataStarter(firstYear, currentYear)
+
+            querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                const transactionYear = data.date?.toDate().getFullYear()
+
+                if (data?.kind === 'shared') {
+                    transactionData.push({
+                        id: doc.id,
+                        ...data,
+                        createdAt: data.createdAt?.toDate().toISOString(),
+                        date: data.date?.toDate().toISOString().split('T')[0],
+                        sharedAmong: Array.isArray(data.sharedAmong)
+                            ? data.sharedAmong.map(person => ({
+                                name: person?.name || '',
+                                amount: parseFloat(person?.amount) || 0
+                            }))
+                            : []
+                    })
+                } else {
+                    transactionData.push({
+                        id: doc.id,
+                        ...data,
+                        createdAt: data.createdAt?.toDate().toISOString(),
+                        date: data.date?.toDate().toISOString().split('T')[0],
+                    });
+                }
+
+                const yearData = yearlyData.find((year) => year.year === transactionYear.toString())
+
+                if (yearData) {
+                    if (data?.kind === 'regular') {
+                        if (data?.type === "Income") yearData.income += data?.amount
+                        else yearData.expense += data?.amount
+                    } else {
+                        if (data?.kind === "debt") yearData.income += data?.amount
+                        else yearData.expense += data?.amount
+                    }
+                }
+            })
+
+            const stats = yearlyData.flatMap((year) => [
+                {
+                    value: year.income,
+                    label: year.year,
+                    spacing: 2,
+                    labelWidth: 30,
+                    labelTextStyle: { color: 'black' },
+                    frontColor: '#A0C878',
+                    labelComponent: (item) => <Text className="font-doodle text-center w-14">{year.year}</Text>
+                },
+                { value: year.expense, frontColor: '#ED6665' }
+            ])
+            return { success: true, stats, transactionData }
+        } catch (error) {
+            console.log("Error in fetching yearlyStats: ", error.message)
+            return { success: false, error }
+        }
+    }
+
+    return { regularExpenseTransactionService, sharedExpenseTransactionService, lendingMoneyTransactionService, debtMoneyTransactionService, weeklyTransactionStats, monthlyTransactionStats, yearlyTransactionStats }
 }
 
 export default useTransactionService;

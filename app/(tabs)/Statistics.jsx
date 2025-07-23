@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { ActivityIndicator, ScrollView, Text, View } from 'react-native'
-import { BarChart } from 'react-native-gifted-charts'
+import { BarChart, PieChart } from 'react-native-gifted-charts'
 import useCurrency from '../../context/currencyContext'
 import Header from '../components/Header'
 import NavigationButtons from '../components/NaigationButtons'
@@ -16,11 +16,40 @@ const Statistics = () => {
     { name: 'Yearly', value: 2 }
   ])
   const [activeStats, setActiveStats] = useState(0)
-  const { weeklyTransactionStats , monthlyTransactionStats} = useTransactionService()
+  const {
+    weeklyTransactionStats,
+    monthlyTransactionStats,
+    yearlyTransactionStats
+  } = useTransactionService()
   const [transactionData, setTransactionData] = useState([])
   const [chartData, setChartData] = useState([])
+  const [donutData, setDonutData] = useState([])
   const [loading, setLoading] = useState(false)
   const { currency } = useCurrency()
+
+  const getDonutData = () => {
+    const incomes = transactionData.reduce(
+      (total, item) => {
+        if (item?.kind === 'regular') {
+          if (item?.type === 'Income') total.income += item?.amount
+          else total.expense += item?.amount
+        } else {
+          if (item?.kind === 'debt') total.income += item?.amount
+          else total.expense += item?.amount
+        }
+
+        return total
+      },
+      { income: 0, expense: 0 }
+    )
+
+    const newDonutData = [
+      { value: incomes.income, color: '#A0C878' },
+      { value: incomes.expense, color: '#ED6665' }
+    ]
+
+    setDonutData(newDonutData)
+  }
 
   const getWeeklyStats = async () => {
     setLoading(true)
@@ -29,6 +58,7 @@ const Statistics = () => {
     if (data.success) {
       setChartData(data.stats)
       setTransactionData(data.transactionData)
+      getDonutData()
     }
     setLoading(false)
   }
@@ -40,6 +70,19 @@ const Statistics = () => {
     if (data.success) {
       setChartData(data.stats)
       setTransactionData(data.transactionData)
+      getDonutData()
+    }
+    setLoading(false)
+  }
+
+  const getYearlyStats = async () => {
+    setLoading(true)
+    const data = await yearlyTransactionStats()
+
+    if (data.success) {
+      setChartData(data.stats)
+      setTransactionData(data.transactionData)
+      getDonutData()
     }
     setLoading(false)
   }
@@ -49,10 +92,20 @@ const Statistics = () => {
       getWeeklyStats()
     }
 
-    if(activeStats == 1){
+    if (activeStats == 1) {
       getMonthlyStats()
     }
+
+    if (activeStats == 2) {
+      getYearlyStats()
+    }
   }, [activeStats])
+
+  useEffect(() => {
+    if (transactionData.length > 0) {
+      getDonutData()
+    }
+  }, [transactionData])
 
   return (
     <HeaderWrapper>
@@ -67,8 +120,9 @@ const Statistics = () => {
 
           <View>
             <Text className='w-full font-doodle text-2xl'>
-              {activeStats === 0 && "Last 7 days transactions"}
-              {activeStats === 1 && "Last 12 months transactions"}
+              {activeStats === 0 && 'Last 7 days transactions'}
+              {activeStats === 1 && 'Last 12 months transactions'}
+              {activeStats === 2 && 'Yearly transactions'}
             </Text>
             <View className='my-2 flex justify-center items-center'>
               {loading ? (
@@ -99,14 +153,35 @@ const Statistics = () => {
                 />
               )}
             </View>
+            <View className='my-2 flex justify-center items-center'>
+              {!loading && (
+                <PieChart
+                  donut
+                  radius={70}
+                  data={donutData}
+                  innerCircleBorderWidth={2}
+                  innerCircleBorderColor={'black'}
+                  strokeWidth={2}
+                  strokeColor='black'
+                  innerCircleColor={'#DDEB9D'}
+                  showTooltip
+                  tooltipComponent={item => (
+                    <Text className='font-doodle text-sm p-2 bg-white rounded-md border-2'>
+                      {currency}{donutData[item].value}
+                    </Text>
+                  )}
+                />
+              )}
+            </View>
             {!loading && transactionData.length === 0 && (
               <Text className='text-center font-doodle'>
                 No Transaction Available...
               </Text>
             )}
-            {!loading && transactionData?.map(data =>
-              data ? <RecentTransaction key={data?.id} data={data} /> : ''
-            )}
+            {!loading &&
+              transactionData?.map(data =>
+                data ? <RecentTransaction key={data?.id} data={data} /> : ''
+              )}
           </View>
         </ScrollView>
       </ScreenWrapper>
