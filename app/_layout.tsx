@@ -41,6 +41,10 @@ export default function RootLayout() {
                   name="(modals)/DebtMoney"
                   options={{ presentation: "modal" }}
                 />
+                <Stack.Screen
+                  name="(modals)/AddMoneyPod"
+                  options={{ presentation: "modal" }}
+                />
               </Stack>
             </TransactionProvider>
           </CurrencyProvider>
