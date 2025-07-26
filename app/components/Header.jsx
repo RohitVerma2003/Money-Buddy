@@ -13,7 +13,7 @@ const Header = ({ heading = '', isbackButton = true }) => {
         </TouchableOpacity>
       )}
       <View className='w-full h-full flex flex-row items-center'>
-        <Text className='font-flap-stick text-3xl'>{heading}</Text>
+        <Text className='font-flap-stick text-3xl line-clamp-1'>{heading}</Text>
         {heading === 'Money Buddy' ? (
           <Image
             source={require('../../assets/Icons/wallet.png')}

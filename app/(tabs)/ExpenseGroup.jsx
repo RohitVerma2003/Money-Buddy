@@ -1,15 +1,22 @@
-import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import { useState } from 'react'
-import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
-import useCurrency from '../../context/currencyContext'
+import {
+  ActivityIndicator,
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View
+} from 'react-native'
 import Header from '../components/Header'
+import MoneyPodCard from '../components/MoneyPodCard'
+import useMoneyPodsDataService from '../services/moneyPodsDataService'
 import HeadWrapper from '../utilities/HeadWrapper'
 import ScreenWrapper from '../utilities/ScreenWrapper'
 
 const ExpenseGroup = () => {
   const [pressed, setPressed] = useState(false)
-  const { currency } = useCurrency()
+  const { moneyPodsData, moneyPodsLoading } = useMoneyPodsDataService()
+
   const router = useRouter()
 
   const pressIn = () => {
@@ -41,31 +48,15 @@ const ExpenseGroup = () => {
           </TouchableOpacity>
         </View>
         <ScrollView showsVerticalScrollIndicator={false} className='mb-3'>
-          <TouchableOpacity className='w-full border-2 rounded-md bg-light-green h-32 p-1 flex items-center mb-2' activeOpacity={0.6}>
-            <View className='h-3/5 w-full flex justify-center'>
-              <Text className='font-doodle text-3xl text-center line-clamp-1'>Goa trip</Text>
-            </View>
-            <View className='h-2/5 w-full border-t-2 flex justify-around items-center flex-row'>
-              <View className='flex flex-row items-center gap-1'>
-                <Text className='font-doodle text-lg'>Income:</Text>
-                <Text className='font-doodle text-2xl text-green-600'>
-                  {currency}2000
-                </Text>
-                <Ionicons name='arrow-up-circle' size={20} color={'#16a34a'} />
-              </View>
-              <View className='flex flex-row items-center gap-1'>
-                <Text className='font-doodle text-lg'>Expense:</Text>
-                <Text className='font-doodle text-2xl text-red-600'>
-                  {currency}2000
-                </Text>
-                <Ionicons
-                  name='arrow-down-circle'
-                  size={20}
-                  color={'#dc2626'}
-                />
-              </View>
-            </View>
-          </TouchableOpacity>
+          {moneyPodsLoading ? (
+            <ActivityIndicator />
+          ) : moneyPodsData.length > 0 ? (
+            moneyPodsData.map((ele, index) => (
+              <MoneyPodCard data={ele} key={index} />
+            ))
+          ) : (
+            <Text className="font-doodle text-center">No MoneyPods Created Yet</Text>
+          )}
         </ScrollView>
       </ScreenWrapper>
     </HeadWrapper>

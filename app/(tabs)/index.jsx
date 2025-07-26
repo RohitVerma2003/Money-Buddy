@@ -4,7 +4,9 @@ import useAuth from '../../context/authContext'
 import useCurrency from '../../context/currencyContext'
 import CreateTransactionButton from '../components/CreateTransactionButton'
 import Header from '../components/Header'
+import MoneyPodCard from '../components/MoneyPodCard'
 import RecentTransaction from '../components/RecentTransaction'
+import useMoneyPodsDataService from '../services/moneyPodsDataService'
 import useTransactionService from '../services/transactionDataService'
 import useWalletService from '../services/walletDataService'
 import HeadWrapper from '../utilities/HeadWrapper'
@@ -15,6 +17,7 @@ const Home = () => {
   const { currency } = useCurrency()
   const { walletAmount, walletData, walletLoading } = useWalletService()
   const { transactionData, transactionLoading } = useTransactionService()
+  const { moneyPodsData, moneyPodsLoading } = useMoneyPodsDataService()
 
   const getAmount = () => {
     const totals = transactionData.reduce(
@@ -108,6 +111,18 @@ const Home = () => {
                 />
               </View>
             </View>
+          </View>
+          <View className='w-full'>
+            <View className='bg-light-green border-2 rounded-md p-2 mb-3'>
+              <Text className='text-2xl font-doodle text-white'>
+                Your Money Pods
+              </Text>
+            </View>
+            {moneyPodsLoading && <ActivityIndicator/>}
+            {(!moneyPodsLoading && moneyPodsData.length === 0) && <Text className="text-center font-doodle">No Money Pods Available...</Text>}
+            {moneyPodsData?.map(data =>
+              data ? <MoneyPodCard key={data?.pod_id} data={data} /> : ''
+            )}
           </View>
           <View className='w-full'>
             <View className='bg-light-green border-2 rounded-md p-2 mb-3'>

@@ -3,8 +3,10 @@ import { ActivityIndicator, ScrollView, Text, View } from 'react-native'
 import { BarChart, PieChart } from 'react-native-gifted-charts'
 import useCurrency from '../../context/currencyContext'
 import Header from '../components/Header'
+import MoneyPodCard from '../components/MoneyPodCard'
 import NavigationButtons from '../components/NaigationButtons'
 import RecentTransaction from '../components/RecentTransaction'
+import useMoneyPodsDataService from '../services/moneyPodsDataService'
 import useTransactionService from '../services/transactionService'
 import HeaderWrapper from '../utilities/HeadWrapper'
 import ScreenWrapper from '../utilities/ScreenWrapper'
@@ -26,6 +28,7 @@ const Statistics = () => {
   const [donutData, setDonutData] = useState([])
   const [loading, setLoading] = useState(false)
   const { currency } = useCurrency()
+  const { moneyPodsData, moneyPodsLoading } = useMoneyPodsDataService()
 
   const getDonutData = () => {
     const incomes = transactionData.reduce(
@@ -167,10 +170,22 @@ const Statistics = () => {
                   showTooltip
                   tooltipComponent={item => (
                     <Text className='font-doodle text-sm p-2 bg-white rounded-md border-2'>
-                      {currency}{donutData[item].value}
+                      {currency}
+                      {donutData[item].value}
                     </Text>
                   )}
                 />
+              )}
+            </View>
+            <View className='w-full'>
+              {moneyPodsLoading && <ActivityIndicator />}
+              {!moneyPodsLoading && moneyPodsData.length === 0 && (
+                <Text className='text-center font-doodle'>
+                  No Money Pods Available...
+                </Text>
+              )}
+              {moneyPodsData?.map((data , index) =>
+                data ? <MoneyPodCard key={index} data={data} /> : ''
               )}
             </View>
             {!loading && transactionData.length === 0 && (
