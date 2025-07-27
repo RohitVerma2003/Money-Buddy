@@ -9,11 +9,12 @@ import ScreenWrapper from '../utilities/ScreenWrapper'
 
 const MoneyPodDetails = () => {
   const { name, docId } = useLocalSearchParams()
-  const { moneyPodTransactionData, moneyPodTransactionLoading } = useMoneyPodTransactionService(docId)
+  const { moneyPodTransactionData, moneyPodTransactionLoading } =
+    useMoneyPodTransactionService(docId)
   return (
     <HeadWrapper>
       <Header heading={name} />
-      <ScreenWrapper>
+      <ScreenWrapper className="relative">
         <CreateMoneyPodTransactionButton podUid={docId} />
         <ScrollView showsVerticalScrollIndicator={false}>
           <View className='w-full'>

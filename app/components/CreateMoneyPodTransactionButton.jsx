@@ -6,7 +6,7 @@ const CreateMoneyPodTransactionButton = ({podUid}) => {
     const router = useRouter()
   return (
     <View className='w-16 absolute bottom-1 right-4 z-10 opacity-80'>
-      <View className='w-full flex justify-center items-center mb-4 relative'>
+      <View className='w-full flex justify-center items-center mb-12 relative'>
         <TouchableOpacity
           className='w-full h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange'
           onPress={() => router.push({pathname:'/(modals)/AddMoneyPodTransaction' , params : {podUid}})}

@@ -107,6 +107,7 @@ const useTransactionService = () => {
     const weeklyTransactionStats = async () => {
         try {
             const colRef = collection(firestore, 'transactions')
+            const podColRef = collection(firestore , 'money_pod_transactions')
             const weeklyData = weeklyDataStarter()
 
             const dateToday = Timestamp.fromDate(new Date())
@@ -116,10 +117,52 @@ const useTransactionService = () => {
 
             const q = query(colRef, where('uid', '==', user.uid), where('date', '>=', sevenDaysAgoDate), where('date', '<=', dateToday), orderBy('date', 'desc'))
 
+            const podq = query(podColRef, where('user_uid', '==', user.uid), where('date', '>=', sevenDaysAgoDate), where('date', '<=', dateToday), orderBy('date', 'desc'))
+
             const querySnapshot = await getDocs(q)
+            const podQuerySnapshot = await getDocs(podq)
             const transactionData = []
 
             querySnapshot.forEach((doc) => {
+                const data = doc.data();
+                const transactionDate = data.date?.toDate().toISOString().split('T')[0]
+
+                if (data?.kind === 'shared') {
+                    transactionData.push({
+                        id: doc.id,
+                        ...data,
+                        createdAt: data.createdAt?.toDate().toISOString(),
+                        date: transactionDate,
+                        sharedAmong: Array.isArray(data.sharedAmong)
+                            ? data.sharedAmong.map(person => ({
+                                name: person?.name || '',
+                                amount: parseFloat(person?.amount) || 0
+                            }))
+                            : []
+                    })
+                } else {
+                    transactionData.push({
+                        id: doc.id,
+                        ...data,
+                        createdAt: data.createdAt?.toDate().toISOString(),
+                        date: transactionDate,
+                    });
+                }
+
+                const dayData = weeklyData.find((day) => day.date === transactionDate)
+
+                if (dayData) {
+                    if (data?.kind === 'regular') {
+                        if (data?.type === "Income") dayData.income += data?.amount
+                        else dayData.expense += data?.amount
+                    } else {
+                        if (data?.kind === "debt") dayData.income += data?.amount
+                        else dayData.expense += data?.amount
+                    }
+                }
+            })
+
+            podQuerySnapshot.forEach((doc) => {
                 const data = doc.data();
                 const transactionDate = data.date?.toDate().toISOString().split('T')[0]
 
@@ -170,6 +213,7 @@ const useTransactionService = () => {
                 },
                 { value: day.expense, frontColor: '#ED6665' }
             ])
+
             return { success: true, stats, transactionData }
         } catch (error) {
             console.log("Error in fetching weeklyStats: ", error.message)

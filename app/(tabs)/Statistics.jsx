@@ -48,7 +48,7 @@ const Statistics = () => {
 
     const newDonutData = [
       { value: incomes.income, color: '#A0C878' },
-      { value: incomes.expense, color: '#ED6665' }
+      { value: Number(incomes.expense.toFixed(2)), color: '#ED6665' }
     ]
 
     setDonutData(newDonutData)

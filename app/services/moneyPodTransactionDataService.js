@@ -1,4 +1,4 @@
-import { collection, onSnapshot, query, where } from 'firebase/firestore'
+import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestore'
 import { useEffect, useState } from 'react'
 import { firestore } from '../../config/firebase'
 import useAuth from '../../context/authContext'
@@ -14,7 +14,7 @@ const useMoneyPodTransactionService = (podUid) => {
         setMoneyPodTransactionLoading(true)
         const colRef = collection(firestore, 'money_pod_transactions')
 
-        const q = query(colRef, where('user_uid', '==', user.uid), where('pod_uid', '==', podUid))
+        const q = query(colRef, where('user_uid', '==', user.uid), where('pod_uid', '==', podUid) , orderBy('createdAt' , 'desc'))
 
         const unsubscribe = onSnapshot(q, (snapshot) => {
             const fetchData = snapshot.docs.map((doc) => {

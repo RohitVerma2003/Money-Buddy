@@ -118,11 +118,15 @@ const Home = () => {
                 Your Money Pods
               </Text>
             </View>
-            {moneyPodsLoading && <ActivityIndicator/>}
-            {(!moneyPodsLoading && moneyPodsData.length === 0) && <Text className="text-center font-doodle">No Money Pods Available...</Text>}
-            {moneyPodsData?.map(data =>
-              data ? <MoneyPodCard key={data?.pod_id} data={data} /> : ''
+            {moneyPodsLoading && <ActivityIndicator />}
+            {!moneyPodsLoading && moneyPodsData.length === 0 && (
+              <Text className='text-center font-doodle'>
+                No Money Pods Available...
+              </Text>
             )}
+            {moneyPodsData?.map((data, index) => (
+              <MoneyPodCard key={index} data={data} />
+            ))}
           </View>
           <View className='w-full'>
             <View className='bg-light-green border-2 rounded-md p-2 mb-3'>
@@ -130,8 +134,12 @@ const Home = () => {
                 Recent Transactions
               </Text>
             </View>
-            {transactionLoading && <ActivityIndicator/>}
-            {(!transactionLoading && transactionData.length === 0) && <Text className="text-center font-doodle">No Transaction Available...</Text>}
+            {transactionLoading && <ActivityIndicator />}
+            {!transactionLoading && transactionData.length === 0 && (
+              <Text className='text-center font-doodle'>
+                No Transaction Available...
+              </Text>
+            )}
             {transactionData?.map(data =>
               data ? <RecentTransaction key={data?.id} data={data} /> : ''
             )}
