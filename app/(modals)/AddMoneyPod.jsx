@@ -3,12 +3,12 @@ import { useRouter } from 'expo-router'
 import { useState } from 'react'
 import {
   ActivityIndicator,
-  Alert,
   Text,
   TextInput,
   TouchableOpacity,
   View
 } from 'react-native'
+import useAlert from "../../context/alertContext"
 import Header from '../components/Header'
 import useMoneyPodsServices from '../services/moneyPodsServices'
 import HeadWrapper from '../utilities/HeadWrapper'
@@ -20,6 +20,7 @@ const AddMoneyPod = () => {
   const [loading, setLoading] = useState(false)
   const { createMoneyPod } = useMoneyPodsServices()
   const router = useRouter()
+  const {showSuccessAlert ,  showDangerAlert} = useAlert()
 
   const handleChange = e => {
     setNameError(false)
@@ -39,9 +40,10 @@ const AddMoneyPod = () => {
     const result = await createMoneyPod(newName)
 
     if (result.success) {
+      showSuccessAlert("Money pod added successfully...")
       router.back()
     } else {
-      Alert.alert('Error', result.error)
+      showDangerAlert("Error in adding the money pod...")
     }
 
     setLoading(false)

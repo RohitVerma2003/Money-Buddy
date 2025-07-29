@@ -1,3 +1,4 @@
+import { AlertProvider } from "@/context/alertContext.js";
 import { AuthProvider } from "@/context/authContext.js";
 import { CurrencyProvider } from "@/context/currencyContext.js";
 import { InternetProvider } from "@/context/internetContext.js";
@@ -16,12 +17,13 @@ export default function RootLayout() {
   });
 
   return (
-    <SafeAreaProvider>
+    <SafeAreaProvider className="relative">
       <AuthProvider>
         <InternetProvider>
           <CurrencyProvider>
             <TransactionProvider>
               <MoneyPodTransactionProvider>
+                <AlertProvider>
                 <Stack screenOptions={{ headerShown: false }}>
                   <Stack.Screen
                     name="(modals)/EditProfile"
@@ -47,7 +49,12 @@ export default function RootLayout() {
                     name="(modals)/AddMoneyPod"
                     options={{ presentation: "modal" }}
                   />
+                  <Stack.Screen
+                    name="(modals)/TransactionDetails"
+                    options={{ presentation: "modal" }}
+                  />
                 </Stack>
+                </AlertProvider>
               </MoneyPodTransactionProvider>
             </TransactionProvider>
           </CurrencyProvider>

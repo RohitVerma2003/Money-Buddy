@@ -4,13 +4,13 @@ import { useRouter } from 'expo-router'
 import { useState } from 'react'
 import {
   ActivityIndicator,
-  Alert,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
   View
 } from 'react-native'
+import useAlert from '../../context/alertContext'
 import useCurrency from '../../context/currencyContext'
 import useTransactions from '../../context/transactionContext'
 import DropDown from '../components/DropDown'
@@ -28,6 +28,7 @@ const RegularTransaction = () => {
   const { regularExpenseTransactionService } = useTransactionService()
   const { currency } = useCurrency()
   const router = useRouter()
+  const {showSuccessAlert , showDangerAlert} = useAlert()
 
   const [isFocus, setIsFocus] = useState(false)
   const [openCalendar, setOpenCalendar] = useState(false)
@@ -91,18 +92,10 @@ const RegularTransaction = () => {
     if (result.success) {
       console.log(result)
       handleReset()
+      showSuccessAlert("Transaction added successfully...")
       router.back()
-      Toast.show({
-        type: 'success',
-        text1: 'Transaction Added Succesfully'
-      })
     } else {
-      Alert.alert('Error', result.error)
-      Toast.show({
-        type: 'error',
-        text1: 'Some error occured',
-        text2: 'Try again later'
-      })
+      showDangerAlert("Error in adding transaction, try again later...")
     }
 
     setLoading(false)

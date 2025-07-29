@@ -184,7 +184,7 @@ const Statistics = () => {
                   No Money Pods Available...
                 </Text>
               )}
-              {moneyPodsData?.map((data , index) =>
+              {moneyPodsData?.map((data, index) =>
                 data ? <MoneyPodCard key={index} data={data} /> : ''
               )}
             </View>

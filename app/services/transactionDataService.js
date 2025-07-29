@@ -24,17 +24,13 @@ const useTransactionService = () => {
             const fetchData = snapshot.docs.map((doc) => {
                 const data = doc.data();
                 if (data?.kind === 'shared') {
+                    const sharedArray = data.sharedAmong.map(person => ({ name: person?.name || "", amount: person?.amount || "" }))
                     return {
                         id: doc.id,
                         ...data,
                         createdAt: data.createdAt?.toDate().toISOString(),
                         date: data.date?.toDate().toISOString().split("T")[0],
-                        sharedAmong: Array.isArray(data.sharedAmong)
-                            ? data.sharedAmong.map(person => ({
-                                name: person?.name || '',
-                                amount: parseFloat(person?.amount) || 0
-                            }))
-                            : []
+                        sharedAmong: sharedArray
                     }
                 } else {
                     return {

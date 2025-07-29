@@ -3,14 +3,14 @@ import DateTimePicker from '@react-native-community/datetimepicker'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { useState } from 'react'
 import {
-    ActivityIndicator,
-    Alert,
-    ScrollView,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View
+  ActivityIndicator,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
 } from 'react-native'
+import useAlert from '../../context/alertContext'
 import useCurrency from '../../context/currencyContext'
 import useMoneyPodTransaction from '../../context/moneyPodTransactionContext'
 import Header from '../components/Header'
@@ -22,6 +22,7 @@ const LendMoneyPodTransaction = () => {
   const { data, handleChange, handleReset } = useMoneyPodTransaction()
   const { lendingMoneyPodTransactionService } = useMoneyPodTransactionService()
   const { currency } = useCurrency()
+  const {showSuccessAlert , showDangerAlert} = useAlert()
   const router = useRouter()
 
   const {podUid} = useLocalSearchParams()
@@ -89,18 +90,10 @@ const LendMoneyPodTransaction = () => {
     if (result.success) {
       console.log(result)
       handleReset()
+      showSuccessAlert("Transaction added successfully...")
       router.back()
-      Toast.show({
-        type: 'success',
-        text1: 'Transaction Added Succesfully'
-      })
     } else {
-      Alert.alert('Error', result.error)
-      Toast.show({
-        type: 'error',
-        text1: 'Some error occured',
-        text2: 'Try again later'
-      })
+      showDangerAlert("Error in adding transaction...")
     }
 
     setLoading(false)

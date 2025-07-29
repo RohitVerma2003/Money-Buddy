@@ -4,13 +4,13 @@ import { Formik } from 'formik'
 import { useState } from 'react'
 import {
   ActivityIndicator,
-  Alert,
   Text,
   TextInput,
   TouchableOpacity,
   View
 } from 'react-native'
 import * as Yup from 'yup'
+import useAlert from "../../context/alertContext"
 import useAuth from '../../context/authContext'
 import Header from '../components/Header'
 import updateUserProfile from '../services/userService'
@@ -21,6 +21,7 @@ const EditProfile = () => {
   const { user, updateUser } = useAuth()
   const [loading, setLoading] = useState(false)
   const router = useRouter()
+  const {showSuccessAlert , showDangerAlert} = useAlert()
 
   const signupSchema = Yup.object().shape({
     name: Yup.string()
@@ -38,9 +39,10 @@ const EditProfile = () => {
 
     if (result.success) {
       await updateUser(uid)
+      showSuccessAlert("Profile updated successfully...")
       router.back()
     } else {
-      Alert.alert('Error', result?.message)
+      showDangerAlert("Error in updating the profile, try again later...")
     }
     setLoading(false)
   }

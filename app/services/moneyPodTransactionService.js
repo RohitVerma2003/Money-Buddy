@@ -1,4 +1,4 @@
-import { collection, doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { firestore } from "../../config/firebase";
 import useAuth from "../../context/authContext";
 import useMoneyPodTransaction from "../../context/moneyPodTransactionContext";
@@ -66,6 +66,36 @@ const useMoneyPodTransactionService = () => {
             }
         }
     }
+    const updateMoneyPodTransactionDelete = async (amount, isExpense, podUid) => {
+        const docRef = doc(firestore, "money_pods", podUid)
+        const docSnap = await getDoc(docRef)
+        console.log(amount , isExpense , podUid)
+
+        if (docSnap.exists()) {
+            const currentIncome = docSnap.data().income
+            const currentExpense = docSnap.data().expense
+
+            const newIncome = isExpense ? currentIncome - Number(parseFloat(amount).toFixed(2)) : currentIncome
+            const newExpense = isExpense ? currentExpense : currentExpense - Number(parseFloat(amount).toFixed(2))
+
+            await updateDoc(docRef, { expense: Number(parseFloat(newExpense).toFixed(2)), income: Number(parseFloat(newIncome).toFixed(2)), updatedAt: serverTimestamp() })
+        }
+    }
+
+    const deleteMoneyPodTransaction = async (amount, podUid, id, isExpense) => {
+        try {
+            const docRef = doc(firestore, "money_pod_transactions", id)
+            await updateMoneyPodTransactionDelete(amount, !isExpense, podUid)
+            await updateWalletService(amount, !isExpense)
+            await deleteDoc(docRef)
+
+            return { success: true }
+        } catch (error) {
+            console.log("Error in deleting the money pod transaction: ", error)
+            return { success: false, error: error.message }
+        }
+
+    }
 
     const regularMoneyPodExpenseTransactionService = async (amount, podUid) => {
         try {
@@ -120,7 +150,7 @@ const useMoneyPodTransactionService = () => {
         }
     }
 
-    return { regularMoneyPodExpenseTransactionService, sharedMoneyPodExpenseTransactionService, lendingMoneyPodTransactionService, debtMoneyPodTransactionService }
+    return { regularMoneyPodExpenseTransactionService, sharedMoneyPodExpenseTransactionService, lendingMoneyPodTransactionService, debtMoneyPodTransactionService, deleteMoneyPodTransaction }
 }
 
 export default useMoneyPodTransactionService;
