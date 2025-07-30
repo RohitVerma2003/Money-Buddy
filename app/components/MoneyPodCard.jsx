@@ -1,12 +1,25 @@
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
 import { Text, TouchableOpacity, View } from 'react-native'
+import useConfirm from '../../context/confirmContext'
 import useCurrency from '../../context/currencyContext'
+import useMoneyPodsServices from '../services/moneyPodsServices'
 
 const MoneyPodCard = ({data}) => {
   const { currency } = useCurrency()
   const router = useRouter()
+  const {confirmBox} = useConfirm()
+  const {deleteMoneyPod} = useMoneyPodsServices()
+
   const {name , income , expense , docId} = data;
+
+  const handleDelete = async ()=>{
+    const result = await confirmBox("Do you want to delete it?")
+    
+    if(result){
+      await deleteMoneyPod(docId)
+    }
+  }
 
   const handleRoute = ()=>{
     router.push({pathname : '/(screens)/MoneyPodDetails' , params : {name , docId}})
@@ -14,10 +27,13 @@ const MoneyPodCard = ({data}) => {
 
   return (
     <TouchableOpacity
-      className='w-full border-2 rounded-md bg-light-green h-32 p-1 flex items-center mb-2'
+      className='w-full border-2 rounded-md bg-light-green h-32 p-1 flex items-center mb-2 relative'
       activeOpacity={0.6}
       onPress={handleRoute}
     >
+      <TouchableOpacity className="absolute top-2 right-2 bg-red-600 rounded-full p-2 z-10" onPress={handleDelete}>
+        <Ionicons name='trash-bin' color={'#A0C878'}/>
+      </TouchableOpacity>
       <View className='h-3/5 w-full flex justify-center'>
         <Text className='font-doodle text-3xl text-center line-clamp-1'>
           {name}

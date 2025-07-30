@@ -1,5 +1,6 @@
 import { AlertProvider } from "@/context/alertContext.js";
 import { AuthProvider } from "@/context/authContext.js";
+import { ConfirmProvider } from "@/context/confirmContext.js";
 import { CurrencyProvider } from "@/context/currencyContext.js";
 import { InternetProvider } from "@/context/internetContext.js";
 import { MoneyPodTransactionProvider } from "@/context/moneyPodTransactionContext.js";
@@ -23,38 +24,40 @@ export default function RootLayout() {
           <CurrencyProvider>
             <TransactionProvider>
               <MoneyPodTransactionProvider>
-                <AlertProvider>
-                <Stack screenOptions={{ headerShown: false }}>
-                  <Stack.Screen
-                    name="(modals)/EditProfile"
-                    options={{ presentation: "modal" }}
-                  />
-                  <Stack.Screen
-                    name="(modals)/AddTransaction"
-                    options={{ presentation: "modal" }}
-                  />
-                  <Stack.Screen
-                    name="(modals)/RegularTransaction"
-                    options={{ presentation: "modal" }}
-                  />
-                  <Stack.Screen
-                    name="(modals)/LendMoney"
-                    options={{ presentation: "modal" }}
-                  />
-                  <Stack.Screen
-                    name="(modals)/DebtMoney"
-                    options={{ presentation: "modal" }}
-                  />
-                  <Stack.Screen
-                    name="(modals)/AddMoneyPod"
-                    options={{ presentation: "modal" }}
-                  />
-                  <Stack.Screen
-                    name="(modals)/TransactionDetails"
-                    options={{ presentation: "modal" }}
-                  />
-                </Stack>
-                </AlertProvider>
+                <ConfirmProvider>
+                  <AlertProvider>
+                    <Stack screenOptions={{ headerShown: false }}>
+                      <Stack.Screen
+                        name="(modals)/EditProfile"
+                        options={{ presentation: "modal" }}
+                      />
+                      <Stack.Screen
+                        name="(modals)/AddTransaction"
+                        options={{ presentation: "modal" }}
+                      />
+                      <Stack.Screen
+                        name="(modals)/RegularTransaction"
+                        options={{ presentation: "modal" }}
+                      />
+                      <Stack.Screen
+                        name="(modals)/LendMoney"
+                        options={{ presentation: "modal" }}
+                      />
+                      <Stack.Screen
+                        name="(modals)/DebtMoney"
+                        options={{ presentation: "modal" }}
+                      />
+                      <Stack.Screen
+                        name="(modals)/AddMoneyPod"
+                        options={{ presentation: "modal" }}
+                      />
+                      <Stack.Screen
+                        name="(modals)/TransactionDetails"
+                        options={{ presentation: "modal" }}
+                      />
+                    </Stack>
+                  </AlertProvider>
+                </ConfirmProvider>
               </MoneyPodTransactionProvider>
             </TransactionProvider>
           </CurrencyProvider>

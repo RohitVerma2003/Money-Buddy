@@ -1,9 +1,11 @@
-import { collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { collection, doc, getDoc, query, serverTimestamp, setDoc, where } from "firebase/firestore";
 import { firestore } from "../../config/firebase";
 import useAuth from "../../context/authContext";
+import useTransactionService from "./transactionService";
 
 const useMoneyPodsServices = () => {
     const { user } = useAuth();
+    const {updateWalletService} = useTransactionService()
 
     const createMoneyPod = async (name) => {
         try {
@@ -19,7 +21,27 @@ const useMoneyPodsServices = () => {
         }
     }
 
-    return { createMoneyPod }
+    const deleteMoneyPod = async (podUid)=>{
+        try {
+            const podDoc = doc(firestore , "money_pods" , podUid)
+            const docSnap = await getDoc(podDoc)
+            const podData = docSnap.data()
+
+            const expense = podData.income
+            const income = podData.expense
+
+            await updateWalletService(expense , true)
+            await updateWalletService(income , false)
+
+            const q = query(collection(firestore , "money_pod_transactions") , where("user_uid" , "==" , user?.uid) , where("pod_uid" , "==" , podUid))
+
+            // Pending
+        } catch (error) {
+            
+        }
+    }
+
+    return { createMoneyPod , deleteMoneyPod }
 }
 
 export default useMoneyPodsServices

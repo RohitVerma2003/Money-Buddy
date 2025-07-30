@@ -481,7 +481,7 @@ const useTransactionService = () => {
         }
     }
 
-    return { regularExpenseTransactionService, sharedExpenseTransactionService, lendingMoneyTransactionService, debtMoneyTransactionService, weeklyTransactionStats, monthlyTransactionStats, yearlyTransactionStats, deleteTransactions }
+    return { regularExpenseTransactionService, sharedExpenseTransactionService, lendingMoneyTransactionService, debtMoneyTransactionService, weeklyTransactionStats, monthlyTransactionStats, yearlyTransactionStats, deleteTransactions,updateWalletService }
 }
 
 export default useTransactionService;
