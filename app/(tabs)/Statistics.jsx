@@ -177,7 +177,7 @@ const Statistics = () => {
                 />
               )}
             </View>
-            <View className='w-full'>
+            {moneyPodsData.length > 0 && <View className='w-full'>
               {moneyPodsLoading && <ActivityIndicator />}
               {!moneyPodsLoading && moneyPodsData.length === 0 && (
                 <Text className='text-center font-doodle'>
@@ -187,7 +187,7 @@ const Statistics = () => {
               {moneyPodsData?.map((data, index) =>
                 data ? <MoneyPodCard key={index} data={data} /> : ''
               )}
-            </View>
+            </View>}
             {!loading && transactionData.length === 0 && (
               <Text className='text-center font-doodle'>
                 No Transaction Available...

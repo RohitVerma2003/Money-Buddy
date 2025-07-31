@@ -104,7 +104,7 @@ const RegularMoneyPodTransaction = () => {
 
   return (
     <HeadWrapper>
-      <Header heading='Regular Money Pod Transaction' />
+      <Header heading='Regular Money Pod' />
       <ScreenWrapper>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View className='w-full h-full'>
@@ -219,7 +219,7 @@ const RegularMoneyPodTransaction = () => {
               onPress={() => setOpenCalendar(!openCalendar)}
             >
               <Text className='font-doodle text-lg'>
-                {data?.date.toString()}
+                {new Date(data?.date.toString()).toDateString()}
               </Text>
             </TouchableOpacity>
 

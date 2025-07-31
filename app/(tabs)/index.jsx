@@ -5,6 +5,7 @@ import useCurrency from '../../context/currencyContext'
 import CreateTransactionButton from '../components/CreateTransactionButton'
 import Header from '../components/Header'
 import MoneyPodCard from '../components/MoneyPodCard'
+import ProfitLossCard from '../components/ProfitLossCard'
 import RecentTransaction from '../components/RecentTransaction'
 import useMoneyPodsDataService from '../services/moneyPodsDataService'
 import useTransactionService from '../services/transactionDataService'
@@ -87,47 +88,32 @@ const Home = () => {
                 ))}
             </View>
           </View>
-          <View className='w-full border-2 rounded-md bg-light-green p-2 mb-3 h-32 flex justify-around items-end overflow-hidden '>
-            <Text className='w-full font-doodle text-lg text-white'>
-              Last 30 days transaction amounts:
-            </Text>
-            <View className='w-full flex justify-between items-center flex-row'>
-              <View className='w-2/5 border-2 rounded-md bg-fade-green h-16 p-2 flex justify-between items-center flex-row'>
-                <Text className='text-2xl text-green-700 font-doodle'>
-                  {currency}
-                  {getAmount().income}
+
+          <ProfitLossCard
+            heading={'Last 30 days transaction amounts: '}
+            income={getAmount().income}
+            expense={getAmount().expense}
+            extra={'*This data is calculated excluding the money pods'}
+          />
+          
+          {moneyPodsData.length > 0 && (
+            <View className='w-full'>
+              <View className='bg-light-green border-2 rounded-md p-2 mb-3'>
+                <Text className='text-2xl font-doodle text-white'>
+                  Your Money Pods
                 </Text>
-                <Ionicons name='arrow-up-circle' color={'#15803d'} size={22} />
               </View>
-              <View className='w-2/5 border-2 rounded-md bg-red-400 h-16 p-2 flex justify-between items-center flex-row'>
-                <Text className='text-2xl text-red-800 font-doodle'>
-                  {currency}
-                  {getAmount().expense}
+              {moneyPodsLoading && <ActivityIndicator />}
+              {!moneyPodsLoading && moneyPodsData.length === 0 && (
+                <Text className='text-center font-doodle mb-3'>
+                  No Money Pods Available...
                 </Text>
-                <Ionicons
-                  name='arrow-down-circle'
-                  color={'#991b1b'}
-                  size={22}
-                />
-              </View>
+              )}
+              {moneyPodsData?.map((data, index) => (
+                <MoneyPodCard key={index} data={data} />
+              ))}
             </View>
-          </View>
-          <View className='w-full'>
-            <View className='bg-light-green border-2 rounded-md p-2 mb-3'>
-              <Text className='text-2xl font-doodle text-white'>
-                Your Money Pods
-              </Text>
-            </View>
-            {moneyPodsLoading && <ActivityIndicator />}
-            {!moneyPodsLoading && moneyPodsData.length === 0 && (
-              <Text className='text-center font-doodle'>
-                No Money Pods Available...
-              </Text>
-            )}
-            {moneyPodsData?.map((data, index) => (
-              <MoneyPodCard key={index} data={data} />
-            ))}
-          </View>
+          )}
           <View className='w-full'>
             <View className='bg-light-green border-2 rounded-md p-2 mb-3'>
               <Text className='text-2xl font-doodle text-white'>

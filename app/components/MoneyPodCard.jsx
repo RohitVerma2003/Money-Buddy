@@ -1,6 +1,8 @@
 import { Ionicons } from '@expo/vector-icons'
 import { useRouter } from 'expo-router'
-import { Text, TouchableOpacity, View } from 'react-native'
+import { useState } from 'react'
+import { ActivityIndicator, Text, TouchableOpacity, View } from 'react-native'
+import useAlert from '../../context/alertContext'
 import useConfirm from '../../context/confirmContext'
 import useCurrency from '../../context/currencyContext'
 import useMoneyPodsServices from '../services/moneyPodsServices'
@@ -10,15 +12,27 @@ const MoneyPodCard = ({data}) => {
   const router = useRouter()
   const {confirmBox} = useConfirm()
   const {deleteMoneyPod} = useMoneyPodsServices()
+  const {showSuccessAlert , showDangerAlert} = useAlert()
 
   const {name , income , expense , docId} = data;
+  const [loading , setLoading] = useState(false)
 
   const handleDelete = async ()=>{
-    const result = await confirmBox("Do you want to delete it?")
+    if(loading) return
+    setLoading(true)
+    const confirm = await confirmBox("Do you want to delete it?")
     
-    if(result){
-      await deleteMoneyPod(docId)
+    if(confirm){
+      const result = await deleteMoneyPod(docId)
+
+      if(result.success){
+        showSuccessAlert("Pod deleted successfully...")
+      }else{
+        showDangerAlert("Error in deleting the pod...")
+      }
     }
+
+    setLoading(false)
   }
 
   const handleRoute = ()=>{
@@ -32,7 +46,7 @@ const MoneyPodCard = ({data}) => {
       onPress={handleRoute}
     >
       <TouchableOpacity className="absolute top-2 right-2 bg-red-600 rounded-full p-2 z-10" onPress={handleDelete}>
-        <Ionicons name='trash-bin' color={'#A0C878'}/>
+        {loading ? <ActivityIndicator/> : <Ionicons name='trash-bin' color={'#A0C878'}/>}
       </TouchableOpacity>
       <View className='h-3/5 w-full flex justify-center'>
         <Text className='font-doodle text-3xl text-center line-clamp-1'>

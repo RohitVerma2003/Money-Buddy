@@ -62,15 +62,6 @@ const Settings = () => {
               className='w-full h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange'
               onPress={() => {}}
             >
-              <Text className='font-flap-stick text-xl'>Friends List</Text>
-            </TouchableOpacity>
-          </View>
-          <View className='w-full flex justify-center items-center mb-3 relative'>
-            <View className='w-full h-16 flex justify-center items-center border-2 rounded-md bg-black absolute left-1 top-1' />
-            <TouchableOpacity
-              className='w-full h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange'
-              onPress={() => {}}
-            >
               <Text className='font-flap-stick text-xl'>Privacy Policy</Text>
             </TouchableOpacity>
           </View>
@@ -85,7 +76,7 @@ const Settings = () => {
               </Text>
             </TouchableOpacity>
           </View>
-          <View className='w-full flex justify-center items-center mb-3 relative'>
+          {/* <View className='w-full flex justify-center items-center mb-3 relative'>
             <View className='w-full h-16 flex justify-center items-center border-2 rounded-md bg-black absolute left-1 top-1' />
             <TouchableOpacity
               className='w-full h-16 flex justify-center items-center border-2 rounded-md bg-red-600'
@@ -93,7 +84,7 @@ const Settings = () => {
             >
               <Text className='font-flap-stick text-xl'>Delete Account</Text>
             </TouchableOpacity>
-          </View>
+          </View> */}
         </View>
       </ScreenWrapper>
     </HeadWrapper>

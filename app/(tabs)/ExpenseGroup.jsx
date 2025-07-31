@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 import Header from '../components/Header'
 import MoneyPodCard from '../components/MoneyPodCard'
+import ProfitLossCard from '../components/ProfitLossCard'
 import useMoneyPodsDataService from '../services/moneyPodsDataService'
 import HeadWrapper from '../utilities/HeadWrapper'
 import ScreenWrapper from '../utilities/ScreenWrapper'
@@ -28,6 +29,16 @@ const ExpenseGroup = () => {
     router.push('(modals)/AddMoneyPod')
   }
 
+  const getAmount = ()=>{
+    const totals = moneyPodsData?.reduce((total , ele)=>{
+      total.income += ele.income
+      total.expense += ele.expense
+      return total
+    } , {income : 0 , expense : 0})
+
+    return totals
+  }
+
   return (
     <HeadWrapper>
       <Header heading='Money Pods' isbackButton={false} />
@@ -44,18 +55,28 @@ const ExpenseGroup = () => {
             onPressIn={pressIn}
             onPressOut={pressOut}
           >
-            <Text className='font-flap-stick text-xl'>Create new group</Text>
+            <Text className='font-flap-stick text-xl'>Create new pod</Text>
           </TouchableOpacity>
         </View>
         <ScrollView showsVerticalScrollIndicator={false} className='mb-3'>
           {moneyPodsLoading ? (
             <ActivityIndicator />
           ) : moneyPodsData.length > 0 ? (
-            moneyPodsData.map((ele, index) => (
+            <>
+              <ProfitLossCard
+                heading={'Money pods total transaction amount'}
+                income={getAmount().income}
+                expense={getAmount().expense}
+                extra={'*This data includes only the money pods data'}
+              />
+              {moneyPodsData.map((ele, index) => (
               <MoneyPodCard data={ele} key={index} />
-            ))
+              ))}
+            </>
           ) : (
-            <Text className="font-doodle text-center">No MoneyPods Created Yet</Text>
+            <Text className='font-doodle text-center'>
+              No MoneyPods Created Yet
+            </Text>
           )}
         </ScrollView>
       </ScreenWrapper>

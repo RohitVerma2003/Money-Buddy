@@ -144,7 +144,7 @@ const SplitTransaction = () => {
 
   return (
     <HeadWrapper>
-      <Header heading='Split Money Pod Transaction' />
+      <Header heading='Split Money Pod' />
       <ScreenWrapper>
         <ScrollView showsVerticalScrollIndicator={false}>
           <View className='w-full h-full'>
@@ -246,7 +246,7 @@ const SplitTransaction = () => {
               onPress={() => setOpenCalendar(!openCalendar)}
             >
               <Text className='font-doodle text-lg'>
-                {data?.date.toString()}
+                {new Date(data?.date.toString()).toDateString()}
               </Text>
             </TouchableOpacity>
 

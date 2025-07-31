@@ -167,7 +167,7 @@ const DebtMoneyTransaction = () => {
               onPress={() => setOpenCalendar(!openCalendar)}
             >
               <Text className='font-doodle text-lg'>
-                {data?.date.toString()}
+                {new Date(data?.date.toString()).toDateString()}
               </Text>
             </TouchableOpacity>
 
