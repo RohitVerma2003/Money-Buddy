@@ -1,14 +1,17 @@
 import { collection, deleteDoc, doc, getDoc, getDocs, query, serverTimestamp, setDoc, where, writeBatch } from "firebase/firestore";
 import { firestore } from "../../config/firebase";
 import useAuth from "../../context/authContext";
+import useInternet from '../../context/internetContext';
 import useTransactionService from "./transactionService";
 
 const useMoneyPodsServices = () => {
     const { user } = useAuth();
+    const {connected} = useInternet()
     const { updateWalletService } = useTransactionService()
 
     const createMoneyPod = async (name) => {
         try {
+            if(!connected) throw new Error("Internet Issue")
             const data = { uid: user?.uid, name, income: Number(parseFloat(0).toFixed(2)), expense: Number(parseFloat(0).toFixed(2)), createdAt: serverTimestamp(), updatedAt: serverTimestamp() }
             const collectionRef = collection(firestore, "money_pods")
             const docRef = doc(collectionRef)
@@ -23,6 +26,7 @@ const useMoneyPodsServices = () => {
 
     const deleteMoneyPod = async (podUid) => {
         try {
+            if(!connected) throw new Error("Internet Issue")
             const podDoc = doc(firestore, "money_pods", podUid)
             const docSnap = await getDoc(podDoc)
             const podData = docSnap.data()

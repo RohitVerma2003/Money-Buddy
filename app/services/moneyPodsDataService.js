@@ -2,14 +2,16 @@ import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestor
 import { useEffect, useState } from 'react'
 import { firestore } from '../../config/firebase'
 import useAuth from '../../context/authContext'
+import useInternet from '../../context/internetContext'
 
 const useMoneyPodsDataService = () => {
     const { user } = useAuth()
+    const {connected} = useInternet()
     const [moneyPodsData, setMoneyPodsData] = useState([])
     const [moneyPodsLoading, setLoading] = useState(true)
 
     useEffect(() => {
-        if (!user?.uid) return;
+        if (!user?.uid || !connected) return;
 
         setLoading(true)
         const colRef = collection(firestore, 'money_pods')

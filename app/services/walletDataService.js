@@ -2,15 +2,17 @@ import { collection, onSnapshot, orderBy, query, where } from 'firebase/firestor
 import { useEffect, useState } from 'react'
 import { firestore } from '../../config/firebase'
 import useAuth from '../../context/authContext'
+import useInternet from '../../context/internetContext'
 
 const useWalletService = () => {
     const { user } = useAuth()
+    const {connected} = useInternet()
     const [walletData, setWalletData] = useState([])
     const [walletAmount, setWalletAmount] = useState(0)
     const [walletLoading, setLoading] = useState(true)
 
     useEffect(() => {
-        if (!user?.uid) return;
+        if (!user?.uid || !connected) return;
 
         setLoading(true)
         const colRef = collection(firestore, 'wallets')

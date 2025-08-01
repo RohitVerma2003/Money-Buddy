@@ -2,6 +2,7 @@ import { collection, deleteDoc, doc, getDoc, getDocs, orderBy, query, serverTime
 import { Text } from "react-native";
 import { firestore } from "../../config/firebase";
 import useAuth from "../../context/authContext";
+import useInternet from '../../context/internetContext';
 import useTransactions from "../../context/transactionContext";
 import monthlyDataStarter from "../utilities/monthlyDataStarter";
 import weeklyDataStarter from "../utilities/weeklyDataStarter";
@@ -10,6 +11,7 @@ import yearlyDataStarter from "../utilities/yearlyDataStarter";
 const useTransactionService = () => {
     const { data } = useTransactions();
     const { user } = useAuth();
+    const {connected} = useInternet()
 
     const regularExpenseData = {
         type: data.type,
@@ -42,6 +44,7 @@ const useTransactionService = () => {
     }
 
     const updateWalletService = async (amount, isExpense) => {
+        if(!connected) throw new Error("Internet Issue")
         const docRef = doc(firestore, "wallets", user?.uid)
         const docSnap = await getDoc(docRef)
 
@@ -57,6 +60,7 @@ const useTransactionService = () => {
 
     const deleteTransactions = async (amount, id , isExpense) => {
         try {
+            if(!connected) throw new Error("Internet Issue")
             const docRef = doc(firestore, "transactions", id)
             await updateWalletService(amount, !isExpense)
             await deleteDoc(docRef)
@@ -69,6 +73,7 @@ const useTransactionService = () => {
 
     const regularExpenseTransactionService = async (amount) => {
         try {
+            if(!connected) throw new Error("Internet Issue")
             const newData = { ...regularExpenseData, uid: user?.uid, createdAt: serverTimestamp(), amount: Number(parseFloat(amount).toFixed(2)) }
             const docRef = doc(collection(firestore, "transactions"))
             await updateWalletService(amount, regularExpenseData?.type === 'Expense')
@@ -82,6 +87,7 @@ const useTransactionService = () => {
 
     const sharedExpenseTransactionService = async (amount) => {
         try {
+            if(!connected) throw new Error("Internet Issue")
             const newData = { ...sharedExpense, uid: user?.uid, createdAt: serverTimestamp(), amount: Number(parseFloat(amount).toFixed(2)) }
             const docRef = doc(collection(firestore, "transactions"))
             await updateWalletService(amount, true)
@@ -94,6 +100,7 @@ const useTransactionService = () => {
 
     const lendingMoneyTransactionService = async (amount) => {
         try {
+            if(!connected) throw new Error("Internet Issue")
             const newData = { ...lendExpense, uid: user?.uid, createdAt: serverTimestamp(), amount: Number(parseFloat(amount).toFixed(2)) }
             const docRef = doc(collection(firestore, "transactions"))
             await updateWalletService(amount, true)
@@ -106,6 +113,7 @@ const useTransactionService = () => {
 
     const debtMoneyTransactionService = async (amount) => {
         try {
+            if(!connected) throw new Error("Internet Issue")
             const newData = { ...debtExpense, uid: user?.uid, createdAt: serverTimestamp(), amount: Number(parseFloat(amount).toFixed(2)) }
             const docRef = doc(collection(firestore, "transactions"))
             await updateWalletService(amount, false)
@@ -118,6 +126,7 @@ const useTransactionService = () => {
 
     const weeklyTransactionStats = async () => {
         try {
+            if(!connected) throw new Error("Internet Issue")
             const colRef = collection(firestore, 'transactions')
             const podColRef = collection(firestore, 'money_pod_transactions')
             const weeklyData = weeklyDataStarter()
@@ -237,6 +246,7 @@ const useTransactionService = () => {
 
     const monthlyTransactionStats = async () => {
         try {
+            if(!connected) throw new Error("Internet Issue")
             const colRef = collection(firestore, 'transactions')
             const podColRef = collection(firestore, 'money_pod_transactions')
             const monthlyData = monthlyDataStarter()
@@ -358,6 +368,7 @@ const useTransactionService = () => {
 
     const yearlyTransactionStats = async () => {
         try {
+            if(!connected) throw new Error("Internet Issue")
             const colRef = collection(firestore, 'transactions')
             const podColRef = collection(firestore, 'money_pod_transactions')
 

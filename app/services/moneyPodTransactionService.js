@@ -1,11 +1,13 @@
 import { collection, deleteDoc, doc, getDoc, serverTimestamp, setDoc, updateDoc } from "firebase/firestore";
 import { firestore } from "../../config/firebase";
 import useAuth from "../../context/authContext";
+import useInternet from '../../context/internetContext';
 import useMoneyPodTransaction from "../../context/moneyPodTransactionContext";
 
 const useMoneyPodTransactionService = () => {
     const { data } = useMoneyPodTransaction();
     const { user } = useAuth();
+    const { connected } = useInternet()
 
     const regularExpenseData = {
         type: data.type,
@@ -38,6 +40,7 @@ const useMoneyPodTransactionService = () => {
     }
 
     const updateWalletService = async (amount, isExpense) => {
+        if (!connected) throw new Error("Internet Issue")
         const docRef = doc(firestore, "wallets", user?.uid)
         const docSnap = await getDoc(docRef)
 
@@ -52,6 +55,7 @@ const useMoneyPodTransactionService = () => {
     }
 
     const updateMoneyPodService = async (amount, isExpense, podUid) => {
+        if (!connected) throw new Error("Internet Issue")
         const docRef = doc(firestore, "money_pods", podUid)
         const docSnap = await getDoc(docRef)
 
@@ -67,9 +71,10 @@ const useMoneyPodTransactionService = () => {
         }
     }
     const updateMoneyPodTransactionDelete = async (amount, isExpense, podUid) => {
+        if (!connected) throw new Error("Internet Issue")
         const docRef = doc(firestore, "money_pods", podUid)
         const docSnap = await getDoc(docRef)
-        console.log(amount , isExpense , podUid)
+        console.log(amount, isExpense, podUid)
 
         if (docSnap.exists()) {
             const currentIncome = docSnap.data().income
@@ -84,6 +89,7 @@ const useMoneyPodTransactionService = () => {
 
     const deleteMoneyPodTransaction = async (amount, podUid, id, isExpense) => {
         try {
+            if (!connected) throw new Error("Internet Issue")
             const docRef = doc(firestore, "money_pod_transactions", id)
             await updateMoneyPodTransactionDelete(amount, !isExpense, podUid)
             await updateWalletService(amount, !isExpense)
@@ -99,6 +105,7 @@ const useMoneyPodTransactionService = () => {
 
     const regularMoneyPodExpenseTransactionService = async (amount, podUid) => {
         try {
+            if (!connected) throw new Error("Internet Issue")
             const newData = { ...regularExpenseData, user_uid: user?.uid, createdAt: serverTimestamp(), amount: Number(parseFloat(amount).toFixed(2)), pod_uid: podUid }
             const docRef = doc(collection(firestore, "money_pod_transactions"))
             await updateMoneyPodService(amount, regularExpenseData?.type === 'Expense', podUid)
@@ -113,6 +120,7 @@ const useMoneyPodTransactionService = () => {
 
     const sharedMoneyPodExpenseTransactionService = async (amount, podUid) => {
         try {
+            if (!connected) throw new Error("Internet Issue")
             const newData = { ...sharedExpense, user_uid: user?.uid, createdAt: serverTimestamp(), amount: Number(parseFloat(amount).toFixed(2)), pod_uid: podUid }
             const docRef = doc(collection(firestore, "money_pod_transactions"))
             await updateMoneyPodService(amount, true, podUid)
@@ -126,6 +134,7 @@ const useMoneyPodTransactionService = () => {
 
     const lendingMoneyPodTransactionService = async (amount, podUid) => {
         try {
+            if (!connected) throw new Error("Internet Issue")
             const newData = { ...lendExpense, user_uid: user?.uid, createdAt: serverTimestamp(), amount: Number(parseFloat(amount).toFixed(2)), pod_uid: podUid }
             const docRef = doc(collection(firestore, "money_pod_transactions"))
             await updateMoneyPodService(amount, true, podUid)
@@ -139,6 +148,7 @@ const useMoneyPodTransactionService = () => {
 
     const debtMoneyPodTransactionService = async (amount, podUid) => {
         try {
+            if (!connected) throw new Error("Internet Issue")
             const newData = { ...debtExpense, user_uid: user?.uid, createdAt: serverTimestamp(), amount: Number(parseFloat(amount).toFixed(2)), pod_uid: podUid }
             const docRef = doc(collection(firestore, "money_pod_transactions"))
             await updateMoneyPodService(amount, false, podUid)

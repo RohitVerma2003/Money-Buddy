@@ -2,14 +2,16 @@ import { collection, onSnapshot, orderBy, query, Timestamp, where } from 'fireba
 import { useEffect, useState } from 'react'
 import { firestore } from '../../config/firebase'
 import useAuth from '../../context/authContext'
+import useInternet from '../../context/internetContext'
 
 const useTransactionService = () => {
     const { user } = useAuth()
+    const {connected} = useInternet()
     const [transactionData, setTransactionData] = useState([])
     const [transactionLoading, setLoading] = useState(true)
 
     useEffect(() => {
-        if (!user?.uid) return;
+        if (!user?.uid || !connected) return;
 
         setLoading(true)
         const colRef = collection(firestore, 'transactions')
