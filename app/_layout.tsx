@@ -8,7 +8,6 @@ import { TransactionProvider } from "@/context/transactionContext.js";
 import { useFonts } from "expo-font";
 import { Stack } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import Toast from "react-native-toast-message";
 import "../global.css";
 
 export default function RootLayout() {
@@ -16,6 +15,8 @@ export default function RootLayout() {
     flapstick: require("../assets/fonts/flapstick.otf"),
     doodle: require("../assets/fonts/doodle.otf"),
   });
+
+  if (!fontsLoaded) return null;
 
   return (
     <SafeAreaProvider className="relative">
@@ -27,6 +28,8 @@ export default function RootLayout() {
                 <ConfirmProvider>
                   <AlertProvider>
                     <Stack screenOptions={{ headerShown: false }}>
+                      <Stack.Screen name="index" />
+                      <Stack.Screen name="(tabs)" />
                       <Stack.Screen
                         name="(modals)/EditProfile"
                         options={{ presentation: "modal" }}
@@ -63,7 +66,6 @@ export default function RootLayout() {
           </CurrencyProvider>
         </InternetProvider>
       </AuthProvider>
-      <Toast />
     </SafeAreaProvider>
   );
 }

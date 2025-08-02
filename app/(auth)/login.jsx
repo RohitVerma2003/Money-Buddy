@@ -5,7 +5,6 @@ import { Formik } from 'formik'
 import { useState } from 'react'
 import {
   ActivityIndicator,
-  Alert,
   ScrollView,
   Text,
   TextInput,
@@ -13,6 +12,7 @@ import {
   View
 } from 'react-native'
 import * as Yup from 'yup'
+import useAlert from '../../context/alertContext'
 import useAuth from '../../context/authContext'
 import HeadWrapper from '../utilities/HeadWrapper'
 import ScreenWrapper from '../utilities/ScreenWrapper'
@@ -21,6 +21,8 @@ const login = () => {
   const router = useRouter()
   const { login } = useAuth()
   const [loading, setLoading] = useState(false)
+
+  const {showSuccessAlert , showDangerAlert} = useAlert()
 
   const signupSchema = Yup.object().shape({
     email: Yup.string().email('Invalid Email').required('Required'),
@@ -35,7 +37,7 @@ const login = () => {
     if (result?.success) {
       console.log(result)
     } else {
-      Alert.alert('Error', result.error.message)
+      if(String(result.error.message).includes('invalid-credential')) showDangerAlert('Invalid Credentials')
     }
     setLoading(false)
   }

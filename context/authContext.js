@@ -10,11 +10,8 @@ export const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const router = useRouter();
-
-    const checkInternet = ()=>{
-        const internet = useNetInfo()
-        return internet.isConnected
-    }
+    console.log(user)
+    const internet = useNetInfo()
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
@@ -32,7 +29,9 @@ export const AuthProvider = ({ children }) => {
             }
         });
 
-        return () => unsubscribe();
+        return () => {
+            if(internet.isConnected)unsubscribe()
+        };
     }, []);
 
 
@@ -63,7 +62,7 @@ export const AuthProvider = ({ children }) => {
 
     const updateUser = async (uid) => {
         try {
-            if(!checkInternet()) return
+            if(!internet.isConnected) return
             const docRef = doc(firestore, "users", uid);
             const snapShot = await getDoc(docRef);
 
