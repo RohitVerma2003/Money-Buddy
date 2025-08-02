@@ -1,50 +1,67 @@
-# Welcome to your Expo app 👋
+# 💰 Money Buddy - Personal Finance Manager App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A React Native application which keeps records for your fianaces.
 
-## Get started
+## Project Overview
 
-1. Install dependencies
+MoneyBuddy is a full-featured personal finance mobile application built with **React Native** and **Firebase**, designed to help users track and manage their daily expenses, income, and shared spending.
 
-   ```bash
-   npm install
-   ```
+## Features
 
-2. Start the app
+### 1. 💸 Transaction Management
+- Add, update, and delete incomes & expenses
+- Transactions which includes sharing expenses with friends, lending money to someone, taking loan from someone etc.
+- Regular, Shared, Lend & Debt Transactions support
 
-   ```bash
-   npx expo start
-   ```
+### 2. 📊 Statistics Dashboard
+- IP-based tracking with cooldown periods
+- Browser session monitoring via cookies
+- Rate limiting for claim attempts
 
-In the output, you'll find options to open the app in a
+### 3. 👥 Shared Expenses
+-  Split costs with friends, view contribution details
+-  This is helpful in tracking how much your friend is contributing
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+### 4. 📁 Money Pods
+-  Group expenses by trips, events, or projects
+-  Group every transaction of a particular occasion in a particular place
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+### 5. ⚙️ Currency Context Support
+- Easily switch and format currencies
 
-## Get a fresh project
+### 6. 🌈 Modern UI
+- Cool Retro UI with the help of tailwind CSS
 
-When you're ready, run:
+and many more....
 
-```bash
-npm run reset-project
-```
+## 📱 Technology Stack
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+- **Frontend**: React Native (Expo), Tailwind CSS (via `nativewind`)
+- **Backend**: Firebase (Auth, Firestore)
+- **Charts**: `react-native-gifted-charts`
+- **Navigation**: `expo-router`
+- **State Management**: React Context API
+  
+## 📸 Screenshots
 
-## Learn more
+- Adding Soon
 
-To learn more about developing your project with Expo, look at the following resources:
+## 🧠 Future Improvements
+- Recurring Transactions
+- Budget Planning
+- PDF Export / Reports
+- Multi-user shared groups with real-time sync
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## 🤝 Acknowledgments
 
-## Join the community
+- React Native and Expo team for the amazing library
+- And the one and only Firebase
+- All contributors and maintainers
 
-Join our community of developers creating universal apps.
+## Support
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+For support, please create an issue in the repository or contact [RohitVerma2003](https://github.com/RohitVerma2003).
+
+---
+
+Built with ❤️ by [RohitVerma2003](https://github.com/RohitVerma2003)
