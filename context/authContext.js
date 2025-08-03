@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNetInfo } from "@react-native-community/netinfo";
 import { useRouter } from "expo-router";
 import { createUserWithEmailAndPassword, onAuthStateChanged, signInWithEmailAndPassword, signOut, updateProfile } from "firebase/auth";
@@ -25,14 +26,26 @@ export const AuthProvider = ({ children }) => {
                 router.replace("/(tabs)");
             } else {
                 setUser(null);
-                router.replace('/(auth)/welcome')
+                const storage = await getData()
+                if (storage.length === 0 || !storage) router.replace('/(auth)/welcome')
             }
         });
 
         return () => {
-            if(internet.isConnected)unsubscribe()
+            if (internet.isConnected) unsubscribe()
         };
     }, []);
+
+    const getData = async () => {
+        try {
+            const keys = await AsyncStorage.getAllKeys();
+            const filteredKeys = keys.filter(key => key !== 'theme');
+
+            return result;
+        } catch (e) {
+            console.error('Error reading value', e);
+        }
+    };
 
 
     const login = async ({ email, password }) => {
@@ -62,7 +75,7 @@ export const AuthProvider = ({ children }) => {
 
     const updateUser = async (uid) => {
         try {
-            if(!internet.isConnected) return
+            if (!internet.isConnected) return
             const docRef = doc(firestore, "users", uid);
             const snapShot = await getDoc(docRef);
 
