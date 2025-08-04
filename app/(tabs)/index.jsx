@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons'
 import { ActivityIndicator, ScrollView, Text, View } from 'react-native'
 import useAuth from '../../context/authContext'
 import useCurrency from '../../context/currencyContext'
+import useTheme from '../../context/themeContext'
 import CreateTransactionButton from '../components/CreateTransactionButton'
 import Header from '../components/Header'
 import MoneyPodCard from '../components/MoneyPodCard'
@@ -16,7 +17,8 @@ import ScreenWrapper from '../utilities/ScreenWrapper'
 const Home = () => {
   const { user } = useAuth()
   const { currency } = useCurrency()
-  const { walletAmount, walletData, walletLoading } = useWalletService()
+  const { isDark } = useTheme()
+  const { walletAmount, walletLoading } = useWalletService()
   const { transactionData, transactionLoading } = useTransactionService()
   const { moneyPodsData, moneyPodsLoading } = useMoneyPodsDataService()
 
@@ -47,11 +49,17 @@ const Home = () => {
         <CreateTransactionButton />
         <ScrollView showsVerticalScrollIndicator={false}>
           <View className='w-full mb-4'>
-            <Text className='font-flap-stick text-2xl'>
+            <Text
+              className={`font-flap-stick text-2xl ${isDark && 'text-white'}`}
+            >
               Welcome! {user?.name}
             </Text>
           </View>
-          <View className='w-full border-2 rounded-md bg-light-green h-24 p-2 mb-2'>
+          <View
+            className={`w-full border-2 rounded-md h-24 p-2 mb-2 ${
+              isDark ? 'bg-light-dark border-grey-white' : 'bg-light-green'
+            }`}
+          >
             <Text className='w-full font-doodle text-lg text-white'>
               Total Amount:{' '}
             </Text>
@@ -62,7 +70,7 @@ const Home = () => {
                     walletAmount === 0
                       ? 'text-yellow-400'
                       : walletAmount > 0
-                      ? 'text-green-700'
+                      ? isDark ? 'text-green-500' : 'text-green-700'
                       : 'text-red-700'
                   }`}
                 >
@@ -76,7 +84,7 @@ const Home = () => {
                 (walletAmount > 0 ? (
                   <Ionicons
                     name='arrow-up-circle'
-                    color={'#15803d'}
+                    color={isDark ? '#22c55e' : '#15803d'}
                     size={25}
                   />
                 ) : (
@@ -95,10 +103,10 @@ const Home = () => {
             expense={getAmount().expense}
             extra={'*This data is calculated excluding the money pods'}
           />
-          
+
           {moneyPodsData.length > 0 && (
             <View className='w-full'>
-              <View className='bg-light-green border-2 rounded-md p-2 mb-3'>
+              <View className={`border-2 rounded-md p-2 mb-3 ${isDark ? 'bg-light-dark border-grey-white' : 'bg-light-green'}`}>
                 <Text className='text-2xl font-doodle text-white'>
                   Your Money Pods
                 </Text>
@@ -115,7 +123,7 @@ const Home = () => {
             </View>
           )}
           <View className='w-full'>
-            <View className='bg-light-green border-2 rounded-md p-2 mb-3'>
+            <View className={`border-2 rounded-md p-2 mb-3 ${isDark ? 'bg-light-dark border-grey-white' : 'bg-light-green'}`}>
               <Text className='text-2xl font-doodle text-white'>
                 Recent Transactions
               </Text>

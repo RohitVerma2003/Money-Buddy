@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown'
 import useCurrency from '../../context/currencyContext'
+import useTheme from '../../context/themeContext'
 import Header from '../components/Header'
 import currencyList from '../constants/currency'
 import HeadWrapper from '../utilities/HeadWrapper'
@@ -11,10 +12,11 @@ const data = currencyList
 
 const Settings = () => {
   const { currency, updateCurrency } = useCurrency()
+  const { isDark, toggleTheme } = useTheme()
   const [isFocus, setIsFocus] = useState(false)
   return (
     <HeadWrapper>
-        <Header heading='Settings'/>
+      <Header heading='Settings' />
       <ScreenWrapper>
         <View className='w-full flex-1 h-full mt-2'>
           <View className='w-full flex justify-between items-center flex-row mb-3'>
@@ -54,6 +56,20 @@ const Settings = () => {
                 )}
                 iconColor='black'
               />
+            </View>
+          </View>
+          <View className='w-full flex justify-between items-center flex-row mb-3'>
+            <View className='w-1/2 flex justify-center items-center relative'>
+              <View className='w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-black absolute right-1 top-1' />
+              <View className='w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange'>
+                <Text className='font-flap-stick text-xl'>Theme</Text>
+              </View>
+            </View>
+            <View className='w-1/2 flex justify-center items-center relative'>
+              <View className='w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-black absolute right-1 top-1' />
+              <TouchableOpacity className='w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange' onPress={toggleTheme}>
+                <Text className='font-flap-stick text-xl'>{isDark ? 'Light' : 'Dark'}</Text>
+              </TouchableOpacity>
             </View>
           </View>
           <View className='w-full flex justify-center items-center mb-3 relative'>

@@ -1,10 +1,13 @@
 import { Ionicons } from '@expo/vector-icons'
 import { useState } from 'react'
 import { Text, TextInput, TouchableOpacity, View } from 'react-native'
+import useTheme from '../../context/themeContext'
 import useTransactions from '../../context/transactionContext'
 
 const SplitForm = () => {
   const { data, addFriend, deleteFriend } = useTransactions()
+  const { isDark } = useTheme()
+
   const [amount, setAmount] = useState(0)
   const [friend, setFriend] = useState('')
   const [error, setError] = useState({ amount: null })
@@ -58,17 +61,25 @@ const SplitForm = () => {
             className='w-full flex flex-row gap-2 justify-between'
             key={index}
           >
-            <View className='w-2/5 bg-light-green border-2 rounded-md h-16 flex justify-center p-2'>
-              <Text className='text-lg font-doodle'>{friend?.name}</Text>
+            <View
+              className={`w-2/5 border-2 rounded-md h-16 flex justify-center p-2 ${
+                isDark ? 'bg-light-dark border-grey-white' : 'bg-light-green'
+              }`}
+            >
+              <Text className={`text-lg font-doodle ${isDark && 'text-white'}`}>{friend?.name}</Text>
             </View>
             <TouchableOpacity
-              className='w-14 h-16 border-2 rounded-md bg-red-500 flex-1 justify-center items-center'
+              className={`w-14 h-16 border-2 rounded-md bg-red-500 flex-1 justify-center items-center ${isDark && 'border-grey-white'}`}
               onPress={() => deleteFriend(friend?.name)}
             >
               <Ionicons name='trash-bin-outline' size={25} />
             </TouchableOpacity>
-            <View className='w-2/5 bg-light-green border-2 rounded-md h-16 flex justify-center p-2'>
-              <Text className='text-lg font-doodle'>{friend?.amount}</Text>
+            <View
+              className={`w-2/5 border-2 rounded-md h-16 flex justify-center p-2 ${
+                isDark ? 'bg-light-dark border-grey-white' : 'bg-light-green'
+              }`}
+            >
+              <Text className={`text-lg font-doodle ${isDark && 'text-white'}`}>{friend?.amount}</Text>
             </View>
           </View>
         ))}
@@ -77,7 +88,9 @@ const SplitForm = () => {
       {/* Form View Section */}
       <View className='w-full flex flex-row gap-2 justify-between'>
         <TextInput
-          className='w-2/5 bg-navy-blue border-2 rounded-md h-16 flex justify-center p-2 text-white font-doodle'
+          className={`w-2/5 bg-navy-blue border-2 rounded-md h-16 flex justify-center p-2 text-white font-doodle ${
+            isDark && 'border-grey-white'
+          }`}
           maxLength={20}
           placeholder='Name'
           placeholderTextColor={'white'}
@@ -85,7 +98,9 @@ const SplitForm = () => {
           value={friend}
         />
         <TextInput
-          className='w-2/5 bg-navy-blue border-2 rounded-md h-16 flex justify-center p-2 text-white font-doodle'
+          className={`w-2/5 bg-navy-blue border-2 rounded-md h-16 flex justify-center p-2 text-white font-doodle ${
+            isDark && 'border-grey-white'
+          }`}
           maxLength={20}
           placeholder='Amount'
           placeholderTextColor={'white'}
@@ -102,7 +117,7 @@ const SplitForm = () => {
             className='w-full flex-1 justify-center items-center'
             onPress={handleAddFriend}
           >
-            <Text className='font-doodle'>Add</Text>
+            <Text className={`font-doodle ${isDark && 'text-white'}`}>Add</Text>
           </TouchableOpacity>
         </View>
       </View>

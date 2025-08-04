@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { ActivityIndicator, ScrollView, Text, View } from 'react-native'
 import { BarChart, PieChart } from 'react-native-gifted-charts'
 import useCurrency from '../../context/currencyContext'
+import useTheme from '../../context/themeContext'
 import Header from '../components/Header'
 import MoneyPodCard from '../components/MoneyPodCard'
 import NavigationButtons from '../components/NaigationButtons'
@@ -29,6 +30,7 @@ const Statistics = () => {
   const [loading, setLoading] = useState(false)
   const { currency } = useCurrency()
   const { moneyPodsData, moneyPodsLoading } = useMoneyPodsDataService()
+  const { isDark } = useTheme()
 
   const getDonutData = () => {
     const incomes = transactionData.reduce(
@@ -122,7 +124,11 @@ const Statistics = () => {
           />
 
           <View>
-            <Text className='w-full font-doodle text-2xl'>
+            <Text
+              className={`w-full font-doodle text-2xl ${
+                isDark && 'text-white'
+              }`}
+            >
               {activeStats === 0 && 'Last 7 days transactions'}
               {activeStats === 1 && 'Last 12 months transactions'}
               {activeStats === 2 && 'Yearly transactions'}
@@ -136,10 +142,15 @@ const Statistics = () => {
                   hideRules
                   xAxisThickness={2}
                   yAxisThickness={2}
-                  yAxisTextStyle={{ color: 'black', fontFamily: 'doodle' }}
+                  yAxisTextStyle={{
+                    color: isDark ? 'white' : 'black',
+                    fontFamily: 'doodle'
+                  }}
+                  xAxisColor={isDark ? '#948979' : 'black'}
+                  yAxisColor={isDark ? '#948979' : 'black'}
                   noOfSections={5}
                   barBorderWidth={2}
-                  barBorderColor={'black'}
+                  barBorderColor={isDark ? '#948979' : 'black'}
                   barBorderTopRightRadius={5}
                   barBorderTopLeftRadius={5}
                   isAnimated={true}
@@ -163,10 +174,10 @@ const Statistics = () => {
                   radius={70}
                   data={donutData}
                   innerCircleBorderWidth={2}
-                  innerCircleBorderColor={'black'}
+                  innerCircleBorderColor={isDark ? '#948979' : 'black'}
                   strokeWidth={2}
-                  strokeColor='black'
-                  innerCircleColor={'#DDEB9D'}
+                  strokeColor={isDark ? '#948979' : 'black'}
+                  innerCircleColor={isDark ? '#222831' : '#DDEB9D'}
                   showTooltip
                   tooltipComponent={item => (
                     <Text className='font-doodle text-sm p-2 bg-white rounded-md border-2'>
@@ -177,17 +188,19 @@ const Statistics = () => {
                 />
               )}
             </View>
-            {moneyPodsData.length > 0 && <View className='w-full'>
-              {moneyPodsLoading && <ActivityIndicator />}
-              {!moneyPodsLoading && moneyPodsData.length === 0 && (
-                <Text className='text-center font-doodle'>
-                  No Money Pods Available...
-                </Text>
-              )}
-              {moneyPodsData?.map((data, index) =>
-                data ? <MoneyPodCard key={index} data={data} /> : ''
-              )}
-            </View>}
+            {moneyPodsData.length > 0 && (
+              <View className='w-full'>
+                {moneyPodsLoading && <ActivityIndicator />}
+                {!moneyPodsLoading && moneyPodsData.length === 0 && (
+                  <Text className='text-center font-doodle'>
+                    No Money Pods Available...
+                  </Text>
+                )}
+                {moneyPodsData?.map((data, index) =>
+                  data ? <MoneyPodCard key={index} data={data} /> : ''
+                )}
+              </View>
+            )}
             {!loading && transactionData.length === 0 && (
               <Text className='text-center font-doodle'>
                 No Transaction Available...

@@ -3,6 +3,7 @@ import { Text } from "react-native";
 import { firestore } from "../../config/firebase";
 import useAuth from "../../context/authContext";
 import useInternet from '../../context/internetContext';
+import useTheme from "../../context/themeContext";
 import useTransactions from "../../context/transactionContext";
 import monthlyDataStarter from "../utilities/monthlyDataStarter";
 import weeklyDataStarter from "../utilities/weeklyDataStarter";
@@ -12,6 +13,7 @@ const useTransactionService = () => {
     const { data } = useTransactions();
     const { user } = useAuth();
     const {connected} = useInternet()
+    const {isDark} = useTheme()
 
     const regularExpenseData = {
         type: data.type,
@@ -230,7 +232,7 @@ const useTransactionService = () => {
                     labelWidth: 30,
                     labelTextStyle: { color: 'black' },
                     frontColor: '#A0C878',
-                    labelComponent: (item) => <Text className="font-doodle text-center">{day.day}</Text>
+                    labelComponent: (item) => <Text className={`font-doodle text-center ${isDark && 'text-white'}`}>{day.day}</Text>
                 },
                 { value: day.expense, frontColor: '#ED6665' }
             ])
@@ -354,7 +356,7 @@ const useTransactionService = () => {
                     labelWidth: 30,
                     labelTextStyle: { color: 'black' },
                     frontColor: '#A0C878',
-                    labelComponent: (item) => <Text className="font-doodle text-center w-14">{month.month}</Text>
+                    labelComponent: (item) => <Text className={`font-doodle text-center line-clamp-1 ${isDark && 'text-white'}`}>{month.month}</Text>
                 },
                 { value: month.expense.toFixed(2), frontColor: '#ED6665' }
             ])
@@ -480,7 +482,7 @@ const useTransactionService = () => {
                     labelWidth: 30,
                     labelTextStyle: { color: 'black' },
                     frontColor: '#A0C878',
-                    labelComponent: (item) => <Text className="font-doodle text-center w-14">{year.year}</Text>
+                    labelComponent: (item) => <Text className={`font-doodle text-center ${isDark && 'text-white'}`}>{year.year}</Text>
                 },
                 { value: year.expense, frontColor: '#ED6665' }
             ])

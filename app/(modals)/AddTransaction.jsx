@@ -1,20 +1,22 @@
 import { Image } from 'expo-image'
 import { useRouter } from 'expo-router'
 import { Text, TouchableOpacity, View } from 'react-native'
+import useTheme from '../../context/themeContext'
 import Header from '../components/Header'
 import HeadWrapper from '../utilities/HeadWrapper'
 import ScreenWrapper from '../utilities/ScreenWrapper'
 
 const AddTransaction = () => {
   const router = useRouter()
+  const {isDark} = useTheme()
   return (
     <HeadWrapper>
       <Header heading='Add Transaction' />
       <ScreenWrapper>
         <View className='w-full flex justify-center items-center mb-3 relative'>
-          <View className='w-full h-28 flex justify-center items-center border-2 rounded-md bg-black absolute left-1 top-1' />
+          <View className={`w-full h-28 flex justify-center items-center border-2 rounded-md absolute left-1 top-1 bg-black`}/>
           <TouchableOpacity
-            className='w-full h-28 flex flex-row justify-around items-center border-2 rounded-md bg-vintage-orange relative overflow-hidden'
+            className={`w-full h-28 flex flex-row justify-around items-center border-2 rounded-md bg-vintage-orange relative overflow-hidden ${isDark && 'border-grey-white'}`}
             onPress={() => {
               router.push('/(modals)/RegularTransaction')
             }}
@@ -32,7 +34,7 @@ const AddTransaction = () => {
         <View className='w-full flex justify-center items-center mb-3 relative'>
           <View className='w-full h-28 flex justify-center items-center border-2 rounded-md bg-black absolute left-1 top-1' />
           <TouchableOpacity
-            className='w-full h-28 flex flex-row justify-around items-center border-2 rounded-md bg-vintage-orange relative'
+            className={`w-full h-28 flex flex-row justify-around items-center border-2 rounded-md bg-vintage-orange relative overflow-hidden ${isDark && 'border-grey-white'}`}
             onPress={() => {
               router.push('/(modals)/SplitTransaction')
             }}
@@ -50,7 +52,7 @@ const AddTransaction = () => {
         <View className='w-full flex justify-center items-center mb-3 relative'>
           <View className='w-full h-28 flex justify-center items-center border-2 rounded-md bg-black absolute left-1 top-1' />
           <TouchableOpacity
-            className='w-full h-28 flex-row justify-around items-center border-2 rounded-md bg-vintage-orange'
+            className={`w-full h-28 flex flex-row justify-around items-center border-2 rounded-md bg-vintage-orange relative overflow-hidden ${isDark && 'border-grey-white'}`}
             onPress={() => {
               router.push('/(modals)/LendMoney')
             }}
@@ -68,7 +70,7 @@ const AddTransaction = () => {
         <View className='w-full flex justify-center items-center mb-3 relative'>
           <View className='w-full h-28 flex justify-center items-center border-2 rounded-md bg-black absolute left-1 top-1' />
           <TouchableOpacity
-            className='w-full h-28 flex-row justify-around items-center border-2 rounded-md bg-vintage-orange'
+            className={`w-full h-28 flex flex-row justify-around items-center border-2 rounded-md bg-vintage-orange relative overflow-hidden ${isDark && 'border-grey-white'}`}
             onPress={() => {
               router.push('/(modals)/DebtMoney')
             }}

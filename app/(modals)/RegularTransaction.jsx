@@ -12,6 +12,7 @@ import {
 } from 'react-native'
 import useAlert from '../../context/alertContext'
 import useCurrency from '../../context/currencyContext'
+import useTheme from '../../context/themeContext'
 import useTransactions from '../../context/transactionContext'
 import DropDown from '../components/DropDown'
 import Header from '../components/Header'
@@ -28,7 +29,8 @@ const RegularTransaction = () => {
   const { regularExpenseTransactionService } = useTransactionService()
   const { currency } = useCurrency()
   const router = useRouter()
-  const {showSuccessAlert , showDangerAlert} = useAlert()
+  const { showSuccessAlert, showDangerAlert } = useAlert()
+  const { isDark } = useTheme()
 
   const [isFocus, setIsFocus] = useState(false)
   const [openCalendar, setOpenCalendar] = useState(false)
@@ -92,10 +94,10 @@ const RegularTransaction = () => {
     if (result.success) {
       console.log(result)
       handleReset()
-      showSuccessAlert("Transaction added successfully...")
+      showSuccessAlert('Transaction added successfully...')
       router.back()
     } else {
-      showDangerAlert("Error in adding transaction, try again later...")
+      showDangerAlert('Error in adding transaction, try again later...')
     }
 
     setLoading(false)
@@ -108,11 +110,21 @@ const RegularTransaction = () => {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View className='w-full h-full'>
             <View className='flex flex-row items-center gap-1 mb-2'>
-              <Ionicons name='cash' size={25} />
-              <Text className='font-doodle text-lg'>Amount ({currency})</Text>
+              <Ionicons
+                name='cash'
+                size={25}
+                color={isDark ? 'white' : 'black'}
+              />
+              <Text className={`font-doodle text-lg ${isDark && 'text-white'}`}>
+                Amount ({currency})
+              </Text>
             </View>
             <TextInput
-              className='w-full h-16 border-2 rounded-md bg-light-green font-doodle text-xl'
+              className={`w-full h-16 border-2 rounded-md font-doodle text-xl ${
+                isDark
+                  ? 'bg-light-dark border-grey-white text-white'
+                  : 'bg-light-green'
+              }`}
               keyboardType='decimal-pad'
               value={amount}
               onChangeText={e => {
@@ -129,8 +141,14 @@ const RegularTransaction = () => {
             )}
 
             <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
-              <Ionicons name='swap-vertical' size={25} />
-              <Text className='font-doodle text-lg'>Type</Text>
+              <Ionicons
+                name='swap-vertical'
+                size={25}
+                color={isDark ? 'white' : 'black'}
+              />
+              <Text className={`font-doodle text-lg ${isDark && 'text-white'}`}>
+                Type
+              </Text>
             </View>
             <DropDown
               data={transactionType}
@@ -143,8 +161,18 @@ const RegularTransaction = () => {
                 setIsFocus(false)
               }}
               renderItem={(item, selected) => (
-                <View className='border-b-2 bg-light-green'>
-                  <Text className='font-doodle p-2 my-2 text-lg'>
+                <View
+                  className={`border-b-2 ${
+                    isDark
+                      ? 'bg-light-dark border-grey-white'
+                      : 'bg-light-green'
+                  }`}
+                >
+                  <Text
+                    className={`font-doodle p-2 my-2 text-lg ${
+                      isDark && 'text-white'
+                    }`}
+                  >
                     {item.label}
                   </Text>
                 </View>
@@ -152,8 +180,14 @@ const RegularTransaction = () => {
             />
 
             <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
-              <Ionicons name='pricetag' size={25} />
-              <Text className='font-doodle text-lg'>Category</Text>
+              <Ionicons
+                name='pricetag'
+                size={25}
+                color={isDark ? 'white' : 'black'}
+              />
+              <Text className={`font-doodle text-lg ${isDark && 'text-white'}`}>
+                Category
+              </Text>
             </View>
 
             <DropDown
@@ -175,13 +209,28 @@ const RegularTransaction = () => {
                     name={selected.icon}
                     size={24}
                     style={{ marginRight: 10 }}
+                    color={isDark && 'white'}
                   />
                 ) : null
               }}
               renderItem={(item, selected) => (
-                <View className='border-b-2 flex flex-row gap-2 px-2 items-center bg-light-green'>
-                  <Ionicons name={item.icon} size={30} />
-                  <Text className='font-doodle p-2 my-2 text-lg'>
+                <View
+                  className={`border-b-2 flex flex-row gap-2 px-2 items-center ${
+                    isDark
+                      ? 'bg-light-dark border-grey-white'
+                      : 'bg-light-green'
+                  }`}
+                >
+                  <Ionicons
+                    name={item.icon}
+                    size={30}
+                    color={isDark && 'white'}
+                  />
+                  <Text
+                    className={`font-doodle p-2 my-2 text-lg ${
+                      isDark && 'text-white'
+                    }`}
+                  >
                     {item.label}
                   </Text>
                 </View>
@@ -195,29 +244,49 @@ const RegularTransaction = () => {
             )}
 
             <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
-              <Ionicons name='document' size={25} />
-              <Text className='font-doodle text-lg'>
+              <Ionicons
+                name='document'
+                size={25}
+                color={isDark ? 'white' : 'black'}
+              />
+              <Text className={`font-doodle text-lg ${isDark && 'text-white'}`}>
                 Descripiton <Text className='text-sm'>(Optional)</Text>
               </Text>
             </View>
 
             <TextInput
-              className='w-full h-16 border-2 rounded-md bg-light-green font-doodle text-xl'
+              className={`w-full h-16 border-2 rounded-md font-doodle text-xl ${
+                isDark
+                  ? 'bg-light-dark border-grey-white text-white'
+                  : 'bg-light-green'
+              }`}
               value={data?.description}
               onChangeText={e => handleChange('description', e)}
               maxLength={100}
             />
 
             <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
-              <Ionicons name='calendar' size={25} />
-              <Text className='font-doodle text-lg'>Date</Text>
+              <Ionicons
+                name='calendar'
+                size={25}
+                color={isDark ? 'white' : 'black'}
+              />
+              <Text className={`font-doodle text-lg ${isDark && 'text-white'}`}>
+                Date
+              </Text>
             </View>
 
             <TouchableOpacity
-              className='w-full h-16 border-2 rounded-md bg-light-green font-doodle text-xl flex justify-center p-2'
+              className={`w-full h-16 border-2 rounded-md bg-light-green font-doodle text-xl flex justify-center p-2 ${
+                isDark ? 'bg-light-dark border-grey-white' : ''
+              }`}
               onPress={() => setOpenCalendar(!openCalendar)}
             >
-              <Text className='font-doodle text-lg'>
+              <Text
+                className={`font-doodle text-lg ${
+                  isDark ? 'text-white bg-light-dark' : ''
+                }`}
+              >
                 {new Date(data?.date.toString()).toDateString()}
               </Text>
             </TouchableOpacity>
