@@ -175,7 +175,7 @@ const Statistics = () => {
                   data={donutData}
                   innerCircleBorderWidth={2}
                   innerCircleBorderColor={isDark ? '#948979' : 'black'}
-                  strokeWidth={2}
+                  strokeWidth={isDark ? 1 : 2}
                   strokeColor={isDark ? '#948979' : 'black'}
                   innerCircleColor={isDark ? '#222831' : '#DDEB9D'}
                   showTooltip

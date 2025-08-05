@@ -10,8 +10,9 @@ import {
   View
 } from 'react-native'
 import * as Yup from 'yup'
-import useAlert from "../../context/alertContext"
+import useAlert from '../../context/alertContext'
 import useAuth from '../../context/authContext'
+import useTheme from '../../context/themeContext'
 import Header from '../components/Header'
 import updateUserProfile from '../services/userService'
 import HeadWrapper from '../utilities/HeadWrapper'
@@ -21,7 +22,8 @@ const EditProfile = () => {
   const { user, updateUser } = useAuth()
   const [loading, setLoading] = useState(false)
   const router = useRouter()
-  const {showSuccessAlert , showDangerAlert} = useAlert()
+  const { showSuccessAlert, showDangerAlert } = useAlert()
+  const { isDark } = useTheme()
 
   const signupSchema = Yup.object().shape({
     name: Yup.string()
@@ -39,10 +41,10 @@ const EditProfile = () => {
 
     if (result.success) {
       await updateUser(uid)
-      showSuccessAlert("Profile updated successfully...")
+      showSuccessAlert('Profile updated successfully...')
       router.back()
     } else {
-      showDangerAlert("Error in updating the profile, try again later...")
+      showDangerAlert('Error in updating the profile, try again later...')
     }
     setLoading(false)
   }
@@ -73,11 +75,25 @@ const EditProfile = () => {
               }) => (
                 <View>
                   <View className='flex flex-row items-center gap-1'>
-                    <Ionicons name='person' size={25} />
-                    <Text className='font-doodle text-lg'>Name</Text>
+                    <Ionicons
+                      name='person'
+                      size={25}
+                      color={isDark ? 'white' : 'black'}
+                    />
+                    <Text
+                      className={`font-doodle text-lg ${
+                        isDark && 'text-white'
+                      }`}
+                    >
+                      Name
+                    </Text>
                   </View>
                   <TextInput
-                    className='w-full h-16 border-2 rounded-md bg-light-green font-doodle text-lg'
+                    className={`w-full h-16 border-2 rounded-md font-doodle text-lg mt-2 ${
+                      isDark
+                        ? 'bg-light-dark border-grey-white text-white'
+                        : 'bg-light-green'
+                    }`}
                     onChangeText={handleChange('name')}
                     onBlur={handleBlur('name')}
                     value={values.name}
@@ -92,7 +108,9 @@ const EditProfile = () => {
                   <View className='w-full flex justify-center items-center mt-10 relative'>
                     <View className='w-4/5 h-16 flex justify-center items-center border-2 rounded-md bg-black absolute right-8 top-1' />
                     <TouchableOpacity
-                      className='w-4/5 h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange'
+                      className={`w-4/5 h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange ${
+                        isDark && 'border-grey-white'
+                      }`}
                       onPress={handleSubmit}
                     >
                       {loading ? (

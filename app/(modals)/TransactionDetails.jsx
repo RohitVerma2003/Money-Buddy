@@ -9,6 +9,7 @@ import {
 } from 'react-native'
 import useAlert from '../../context/alertContext'
 import useCurrency from '../../context/currencyContext'
+import useTheme from '../../context/themeContext'
 import Header from '../components/Header'
 import useMoneyPodTransactionService from '../services/moneyPodTransactionService'
 import useTransactionService from '../services/transactionService'
@@ -25,9 +26,10 @@ const TransactionDetails = () => {
   const [loading, setLoading] = useState(false)
 
   const { currency } = useCurrency()
+  const { isDark } = useTheme()
   const { deleteTransactions } = useTransactionService()
   const { deleteMoneyPodTransaction } = useMoneyPodTransactionService()
-  const {showSuccessAlert , showDangerAlert} = useAlert()
+  const { showSuccessAlert, showDangerAlert } = useAlert()
   const router = useRouter()
 
   const isExpense = () => {
@@ -50,9 +52,9 @@ const TransactionDetails = () => {
     setLoading(false)
 
     if (!result.success) {
-      showDangerAlert("Error in deleting the transaction...")
+      showDangerAlert('Error in deleting the transaction...')
     } else {
-      showSuccessAlert("Transaction deleted successfully...")
+      showSuccessAlert('Transaction deleted successfully...')
       router.back()
     }
   }
@@ -64,51 +66,91 @@ const TransactionDetails = () => {
         <ScrollView>
           <View className='mt-3'>
             <View className='flex flex-row gap-2 items-center mb-2'>
-              <Text className='font-doodle text-2xl'>Amount: </Text>
+              <Text
+                className={`font-doodle text-2xl ${isDark && 'text-white'}`}
+              >
+                Amount:{' '}
+              </Text>
               <Text
                 className={`font-doodle text-2xl border-2 rounded-md px-2 ${
                   isExpense() ? 'bg-red-600 text-white' : 'bg-light-green'
-                }`}
+                } ${isDark && 'border-grey-white'}`}
               >
                 {currency}
                 {parseFloat(data?.amount).toFixed(2)}
               </Text>
             </View>
             <View className='flex flex-row gap-2 items-center mb-2'>
-              <Text className='font-doodle text-2xl'>Category: </Text>
-              <Text className='font-doodle text-2xl bg-light-green border-2 rounded-md px-2'>
+              <Text
+                className={`font-doodle text-2xl ${isDark && 'text-white'}`}
+              >
+                Category:{' '}
+              </Text>
+              <Text
+                className={`font-doodle text-2xl bg-light-green border-2 rounded-md px-2 ${
+                  isDark && 'border-grey-white'
+                }`}
+              >
                 {data.category || data.kind}
               </Text>
             </View>
             <View className='flex flex-row gap-2 items-center mb-2'>
-              <Text className='font-doodle text-2xl'>Date: </Text>
-              <Text className='font-doodle text-2xl bg-light-green border-2 rounded-md px-2'>
+              <Text
+                className={`font-doodle text-2xl ${isDark && 'text-white'}`}
+              >
+                Date:{' '}
+              </Text>
+              <Text
+                className={`font-doodle text-2xl bg-light-green border-2 rounded-md px-2 ${
+                  isDark && 'border-grey-white'
+                }`}
+              >
                 {data.date}
               </Text>
             </View>
             {data?.description && (
               <View className='flex flex-row gap-2 items-center mb-2'>
-                <Text className='font-doodle text-2xl'>Description: </Text>
-                <Text className='font-doodle text-2xl bg-light-green border-2 rounded-md px-2'>
+                <Text
+                  className={`font-doodle text-2xl ${isDark && 'text-white'}`}
+                >
+                  Description:{' '}
+                </Text>
+                <Text
+                  className={`font-doodle text-2xl bg-light-green border-2 rounded-md px-2 ${
+                    isDark && 'border-grey-white'
+                  }`}
+                >
                   {data.description}
                 </Text>
               </View>
             )}
             {data?.sharedAmong && (
               <View>
-                <Text className='font-doodle text-2xl'>Sharing: </Text>
+                <Text
+                  className={`font-doodle text-2xl ${isDark && 'text-white'}`}
+                >
+                  Sharing:{' '}
+                </Text>
               </View>
             )}
             {data?.sharedAmong &&
               data?.sharedAmong.map((ele, index) => (
                 <View key={index} className='flex flex-row gap-2 ml-3'>
                   <View className='flex flex-row gap-2 items-center mb-2'>
-                    <Text className='font-doodle text-2xl bg-light-green border-2 rounded-md px-2'>
+                    <Text
+                      className={`font-doodle text-2xl bg-light-green border-2 rounded-md px-2 ${
+                        isDark && 'border-grey-white'
+                      }`}
+                    >
                       {ele.name}
                     </Text>
                   </View>
                   <View className='flex flex-row gap-2 items-center mb-2'>
-                    <Text className='font-doodle text-2xl bg-light-green border-2 rounded-md px-2'>
+                    <Text
+                      className={`font-doodle text-2xl bg-light-green border-2 rounded-md px-2 ${
+                        isDark && 'border-grey-white'
+                      }`}
+                    >
                       {currency}
                       {ele.amount}
                     </Text>
@@ -118,7 +160,9 @@ const TransactionDetails = () => {
             <View className='w-full flex justify-center items-center relative mt-3'>
               <View className='w-4/5 h-16 flex justify-center items-center border-2 rounded-md bg-black absolute right-9 top-1' />
               <TouchableOpacity
-                className='w-4/5 h-16 flex justify-center items-center border-2 rounded-md bg-red-600'
+                className={`w-4/5 h-16 flex justify-center items-center border-2 rounded-md bg-red-600 ${
+                  isDark && 'border-grey-white'
+                }`}
                 onPress={handleDelete}
               >
                 {loading ? (

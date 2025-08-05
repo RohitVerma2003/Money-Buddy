@@ -2,10 +2,12 @@ import { Ionicons } from '@expo/vector-icons'
 import { Tabs } from 'expo-router'
 import { View } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
+import useTheme from '../../context/themeContext'
 import '../../global.css'
 
 export default function RootLayout () {
   const inset = useSafeAreaInsets()
+  const {isDark} = useTheme()
   return (
     <Tabs
       screenOptions={{
@@ -26,7 +28,7 @@ export default function RootLayout () {
                 focused ? 'rounded-full bg-vintage-orange' : ''
               }`}
             >
-              <Ionicons name='home' color={'white'} size={20} />
+              <Ionicons name='home' color={isDark ? '#DFD0B8' : 'white'} size={20} />
             </View>
           )
         }}
@@ -40,7 +42,7 @@ export default function RootLayout () {
                 focused ? 'rounded-full bg-vintage-orange' : ''
               }`}
             >
-              <Ionicons name='bar-chart' color={'white'} size={20} />
+              <Ionicons name='bar-chart' color={isDark ? '#DFD0B8' : 'white'} size={20} />
             </View>
           )
         }}
@@ -54,7 +56,7 @@ export default function RootLayout () {
                 focused ? 'rounded-full bg-vintage-orange' : ''
               }`}
             >
-              <Ionicons name='grid' color={'white'} size={20} />
+              <Ionicons name='grid' color={isDark ? '#DFD0B8' : 'white'} size={20} />
             </View>
           )
         }}
@@ -68,7 +70,7 @@ export default function RootLayout () {
                 focused ? 'rounded-full bg-vintage-orange' : ''
               }`}
             >
-              <Ionicons name='person' color={'white'} size={20} />
+              <Ionicons name='person' color={isDark ? '#DFD0B8' : 'white'} size={20} />
             </View>
           )
         }}

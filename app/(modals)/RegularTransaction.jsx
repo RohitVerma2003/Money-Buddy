@@ -277,8 +277,8 @@ const RegularTransaction = () => {
             </View>
 
             <TouchableOpacity
-              className={`w-full h-16 border-2 rounded-md bg-light-green font-doodle text-xl flex justify-center p-2 ${
-                isDark ? 'bg-light-dark border-grey-white' : ''
+              className={`w-full h-16 border-2 rounded-md font-doodle text-xl flex justify-center p-2 ${
+                isDark ? 'bg-light-dark border-grey-white' : 'bg-light-green'
               }`}
               onPress={() => setOpenCalendar(!openCalendar)}
             >
@@ -308,7 +308,9 @@ const RegularTransaction = () => {
             <View className='w-full flex justify-center items-center mb-3 relative mt-3'>
               <View className='w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-black absolute right-3 top-1' />
               <TouchableOpacity
-                className='w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange'
+                className={`w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange ${
+                  isDark && 'border-grey-white'
+                }`}
                 onPress={handleSubmit}
               >
                 {loading ? (

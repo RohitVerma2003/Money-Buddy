@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   View
 } from 'react-native'
+import useTheme from '../../context/themeContext'
 import Header from '../components/Header'
 import MoneyPodCard from '../components/MoneyPodCard'
 import ProfitLossCard from '../components/ProfitLossCard'
@@ -17,6 +18,7 @@ import ScreenWrapper from '../utilities/ScreenWrapper'
 const ExpenseGroup = () => {
   const [pressed, setPressed] = useState(false)
   const { moneyPodsData, moneyPodsLoading } = useMoneyPodsDataService()
+  const { isDark } = useTheme()
 
   const router = useRouter()
 
@@ -29,12 +31,15 @@ const ExpenseGroup = () => {
     router.push('(modals)/AddMoneyPod')
   }
 
-  const getAmount = ()=>{
-    const totals = moneyPodsData?.reduce((total , ele)=>{
-      total.income += ele.income
-      total.expense += ele.expense
-      return total
-    } , {income : 0 , expense : 0})
+  const getAmount = () => {
+    const totals = moneyPodsData?.reduce(
+      (total, ele) => {
+        total.income += ele.income
+        total.expense += ele.expense
+        return total
+      },
+      { income: 0, expense: 0 }
+    )
 
     return totals
   }
@@ -51,7 +56,7 @@ const ExpenseGroup = () => {
             activeOpacity={1}
             className={`w-full h-20 border-2 rounded-md bg-vintage-orange flex justify-center items-center ${
               pressed && 'mt-1'
-            }`}
+            } ${isDark && 'border-grey-white'}`}
             onPressIn={pressIn}
             onPressOut={pressOut}
           >
@@ -70,7 +75,7 @@ const ExpenseGroup = () => {
                 extra={'*This data includes only the money pods data'}
               />
               {moneyPodsData.map((ele, index) => (
-              <MoneyPodCard data={ele} key={index} />
+                <MoneyPodCard data={ele} key={index} />
               ))}
             </>
           ) : (

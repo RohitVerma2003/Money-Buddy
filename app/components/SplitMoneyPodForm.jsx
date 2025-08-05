@@ -2,12 +2,14 @@ import { Ionicons } from '@expo/vector-icons'
 import { useState } from 'react'
 import { Text, TextInput, TouchableOpacity, View } from 'react-native'
 import useMoneyPodTransaction from '../../context/moneyPodTransactionContext'
+import useTheme from '../../context/themeContext'
 
 const SplitMoneyPodForm = () => {
   const { data, addFriend, deleteFriend } = useMoneyPodTransaction()
   const [amount, setAmount] = useState(0)
   const [friend, setFriend] = useState('')
   const [error, setError] = useState({ amount: null })
+  const { isDark } = useTheme()
 
   const isValidAmount = () => {
     if (amount === '') return false
@@ -58,8 +60,14 @@ const SplitMoneyPodForm = () => {
             className='w-full flex flex-row gap-2 justify-between'
             key={index}
           >
-            <View className='w-2/5 bg-light-green border-2 rounded-md h-16 flex justify-center p-2'>
-              <Text className='text-lg font-doodle'>{friend?.name}</Text>
+            <View
+              className={`w-2/5 border-2 rounded-md h-16 flex justify-center p-2 ${
+                isDark ? 'bg-light-dark border-grey-white' : 'bg-light-green'
+              }`}
+            >
+              <Text className={`text-lg font-doodle ${isDark && 'text-white'}`}>
+                {friend?.name}
+              </Text>
             </View>
             <TouchableOpacity
               className='w-14 h-16 border-2 rounded-md bg-red-500 flex-1 justify-center items-center'
@@ -67,8 +75,14 @@ const SplitMoneyPodForm = () => {
             >
               <Ionicons name='trash-bin-outline' size={25} />
             </TouchableOpacity>
-            <View className='w-2/5 bg-light-green border-2 rounded-md h-16 flex justify-center p-2'>
-              <Text className='text-lg font-doodle'>{friend?.amount}</Text>
+            <View
+              className={`w-2/5 border-2 rounded-md h-16 flex justify-center p-2 ${
+                isDark ? 'bg-light-dark border-grey-white' : 'bg-light-green'
+              }`}
+            >
+              <Text className={`text-lg font-doodle ${isDark && 'text-white'}`}>
+                {friend?.amount}
+              </Text>
             </View>
           </View>
         ))}
@@ -77,7 +91,9 @@ const SplitMoneyPodForm = () => {
       {/* Form View Section */}
       <View className='w-full flex flex-row gap-2 justify-between'>
         <TextInput
-          className='w-2/5 bg-navy-blue border-2 rounded-md h-16 flex justify-center p-2 text-white font-doodle'
+          className={`w-2/5 bg-navy-blue border-2 rounded-md h-16 flex justify-center p-2 text-white font-doodle ${
+            isDark && 'border-grey-white'
+          }`}
           maxLength={20}
           placeholder='Name'
           placeholderTextColor={'white'}
@@ -85,7 +101,9 @@ const SplitMoneyPodForm = () => {
           value={friend}
         />
         <TextInput
-          className='w-2/5 bg-navy-blue border-2 rounded-md h-16 flex justify-center p-2 text-white font-doodle'
+          className={`w-2/5 bg-navy-blue border-2 rounded-md h-16 flex justify-center p-2 text-white font-doodle ${
+            isDark && 'border-grey-white'
+          }`}
           maxLength={20}
           placeholder='Amount'
           placeholderTextColor={'white'}
@@ -97,7 +115,7 @@ const SplitMoneyPodForm = () => {
           onBlur={handleBlurAmount}
           value={amount}
         />
-        <View className='w-14 h-16 border-2 rounded-md bg-vintage-orange'>
+        <View className={`w-14 h-16 border-2 rounded-md bg-vintage-orange ${isDark && 'border-grey-white'}`}>
           <TouchableOpacity
             className='w-full flex-1 justify-center items-center'
             onPress={handleAddFriend}

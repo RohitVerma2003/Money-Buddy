@@ -22,7 +22,11 @@ const Settings = () => {
           <View className='w-full flex justify-between items-center flex-row mb-3'>
             <View className='w-1/2 flex justify-center items-center relative'>
               <View className='w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-black absolute right-1 top-1' />
-              <View className='w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange'>
+              <View
+                className={`w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange ${
+                  isDark && 'border-grey-white'
+                }`}
+              >
                 <Text className='font-flap-stick text-xl'>Currency</Text>
               </View>
             </View>
@@ -61,21 +65,34 @@ const Settings = () => {
           <View className='w-full flex justify-between items-center flex-row mb-3'>
             <View className='w-1/2 flex justify-center items-center relative'>
               <View className='w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-black absolute right-1 top-1' />
-              <View className='w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange'>
+              <View
+                className={`w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange ${
+                  isDark && 'border-grey-white'
+                }`}
+              >
                 <Text className='font-flap-stick text-xl'>Theme</Text>
               </View>
             </View>
             <View className='w-1/2 flex justify-center items-center relative'>
               <View className='w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-black absolute right-1 top-1' />
-              <TouchableOpacity className='w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange' onPress={toggleTheme}>
-                <Text className='font-flap-stick text-xl'>{isDark ? 'Light' : 'Dark'}</Text>
+              <TouchableOpacity
+                className={`w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange ${
+                  isDark && 'border-grey-white'
+                }`}
+                onPress={toggleTheme}
+              >
+                <Text className='font-flap-stick text-xl'>
+                  {isDark ? 'Light' : 'Dark'}
+                </Text>
               </TouchableOpacity>
             </View>
           </View>
           <View className='w-full flex justify-center items-center mb-3 relative'>
             <View className='w-full h-16 flex justify-center items-center border-2 rounded-md bg-black absolute left-1 top-1' />
             <TouchableOpacity
-              className='w-full h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange'
+              className={`w-full h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange ${
+                isDark && 'border-grey-white'
+              }`}
               onPress={() => {}}
             >
               <Text className='font-flap-stick text-xl'>Privacy Policy</Text>
@@ -84,7 +101,9 @@ const Settings = () => {
           <View className='w-full flex justify-center items-center mb-3 relative'>
             <View className='w-full h-16 flex justify-center items-center border-2 rounded-md bg-black absolute left-1 top-1' />
             <TouchableOpacity
-              className='w-full h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange'
+              className={`w-full h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange ${
+                isDark && 'border-grey-white'
+              }`}
               onPress={() => {}}
             >
               <Text className='font-flap-stick text-xl'>

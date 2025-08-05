@@ -1,6 +1,7 @@
 import { Image } from 'expo-image'
 import { useLocalSearchParams, useRouter } from 'expo-router'
 import { Text, TouchableOpacity, View } from 'react-native'
+import useTheme from '../../context/themeContext'
 import Header from '../components/Header'
 import HeadWrapper from '../utilities/HeadWrapper'
 import ScreenWrapper from '../utilities/ScreenWrapper'
@@ -8,6 +9,7 @@ import ScreenWrapper from '../utilities/ScreenWrapper'
 const AddMoneyPodTransaction = () => {
   const router = useRouter()
   const { podUid } = useLocalSearchParams()
+  const {isDark} = useTheme()
   return (
     <HeadWrapper>
       <Header heading='Add Transaction' />
@@ -15,7 +17,7 @@ const AddMoneyPodTransaction = () => {
         <View className='w-full flex justify-center items-center mb-3 relative'>
           <View className='w-full h-28 flex justify-center items-center border-2 rounded-md bg-black absolute left-1 top-1' />
           <TouchableOpacity
-            className='w-full h-28 flex-row justify-around items-center border-2 rounded-md bg-vintage-orange'
+            className={`w-full h-28 flex-row justify-around items-center border-2 rounded-md bg-vintage-orange ${isDark && 'border-grey-white'}`}
             onPress={() => {
               router.push({
                 pathname: '/(modals)/RegularMoneyPodTransaction',
@@ -36,7 +38,7 @@ const AddMoneyPodTransaction = () => {
         <View className='w-full flex justify-center items-center mb-3 relative'>
           <View className='w-full h-28 flex justify-center items-center border-2 rounded-md bg-black absolute left-1 top-1' />
           <TouchableOpacity
-            className='w-full h-28 flex-row justify-around items-center border-2 rounded-md bg-vintage-orange'
+            className={`w-full h-28 flex-row justify-around items-center border-2 rounded-md bg-vintage-orange ${isDark && 'border-grey-white'}`}
             onPress={() => {
               router.push({
                 pathname: '/(modals)/SplitMoneyPodTransaction',
@@ -57,7 +59,7 @@ const AddMoneyPodTransaction = () => {
         <View className='w-full flex justify-center items-center mb-3 relative'>
           <View className='w-full h-28 flex justify-center items-center border-2 rounded-md bg-black absolute left-1 top-1' />
           <TouchableOpacity
-            className='w-full h-28 flex-row justify-around items-center border-2 rounded-md bg-vintage-orange'
+            className={`w-full h-28 flex-row justify-around items-center border-2 rounded-md bg-vintage-orange ${isDark && 'border-grey-white'}`}
             onPress={() => {
               router.push({
                 pathname: '/(modals)/LendMoneyPod',
@@ -78,7 +80,7 @@ const AddMoneyPodTransaction = () => {
         <View className='w-full flex justify-center items-center mb-3 relative'>
           <View className='w-full h-28 flex justify-center items-center border-2 rounded-md bg-black absolute left-1 top-1' />
           <TouchableOpacity
-            className='w-full h-28 flex-row justify-around items-center border-2 rounded-md bg-vintage-orange'
+            className={`w-full h-28 flex-row justify-around items-center border-2 rounded-md bg-vintage-orange ${isDark && 'border-grey-white'}`}
             onPress={() => {
               router.push({
                 pathname: '/(modals)/DebtMoneyPod',

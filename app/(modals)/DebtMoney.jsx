@@ -12,6 +12,7 @@ import {
 } from 'react-native'
 import useAlert from '../../context/alertContext'
 import useCurrency from '../../context/currencyContext'
+import useTheme from '../../context/themeContext'
 import useTransactions from '../../context/transactionContext'
 import Header from '../components/Header'
 import useTransactionService from '../services/transactionService'
@@ -23,7 +24,8 @@ const DebtMoneyTransaction = () => {
   const { debtMoneyTransactionService } = useTransactionService()
   const { currency } = useCurrency()
   const router = useRouter()
-  const {showSuccessAlert , showDangerAlert} = useAlert()
+  const { showSuccessAlert, showDangerAlert } = useAlert()
+  const { isDark } = useTheme()
 
   const [openCalendar, setOpenCalendar] = useState(false)
   const [amount, setAmount] = useState('0')
@@ -89,10 +91,10 @@ const DebtMoneyTransaction = () => {
     if (result.success) {
       console.log(result)
       handleReset()
-      showSuccessAlert("Transaction added successfully...")
+      showSuccessAlert('Transaction added successfully...')
       router.back()
     } else {
-      showDangerAlert("Error in adding the transaction...")
+      showDangerAlert('Error in adding the transaction...')
     }
 
     setLoading(false)
@@ -105,11 +107,21 @@ const DebtMoneyTransaction = () => {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View className='w-full h-full'>
             <View className='flex flex-row items-center gap-1 mb-2'>
-              <Ionicons name='cash' size={25} />
-              <Text className='font-doodle text-lg'>Amount ({currency})</Text>
+              <Ionicons
+                name='cash'
+                size={25}
+                color={isDark ? 'white' : 'black'}
+              />
+              <Text className={`font-doodle text-lg ${isDark && 'text-white'}`}>
+                Amount ({currency})
+              </Text>
             </View>
             <TextInput
-              className='w-full h-16 border-2 rounded-md bg-light-green font-doodle text-xl'
+              className={`w-full h-16 border-2 rounded-md font-doodle text-xl ${
+                isDark
+                  ? 'bg-light-dark border-grey-white text-white'
+                  : 'bg-light-green'
+              }`}
               keyboardType='decimal-pad'
               value={amount}
               onChangeText={e => {
@@ -126,12 +138,22 @@ const DebtMoneyTransaction = () => {
             )}
 
             <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
-              <Ionicons name='person' size={25} />
-              <Text className='font-doodle text-lg'>Lending from</Text>
+              <Ionicons
+                name='person'
+                size={25}
+                color={isDark ? 'white' : 'black'}
+              />
+              <Text className={`font-doodle text-lg ${isDark && 'text-white'}`}>
+                Lending from
+              </Text>
             </View>
 
             <TextInput
-              className='w-full h-16 border-2 rounded-md bg-light-green font-doodle text-xl'
+              className={`w-full h-16 border-2 rounded-md font-doodle text-xl ${
+                isDark
+                  ? 'bg-light-dark border-grey-white text-white'
+                  : 'bg-light-green'
+              }`}
               value={data?.lendingFrom}
               onChangeText={e => handleChange('lendingFrom', e)}
               maxLength={20}
@@ -144,29 +166,45 @@ const DebtMoneyTransaction = () => {
             )}
 
             <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
-              <Ionicons name='document' size={25} />
-              <Text className='font-doodle text-lg'>
+              <Ionicons
+                name='document'
+                size={25}
+                color={isDark ? 'white' : 'black'}
+              />
+              <Text className={`font-doodle text-lg ${isDark && 'text-white'}`}>
                 Descripiton <Text className='text-sm'>(Optional)</Text>
               </Text>
             </View>
 
             <TextInput
-              className='w-full h-16 border-2 rounded-md bg-light-green font-doodle text-xl'
+              className={`w-full h-16 border-2 rounded-md font-doodle text-xl ${
+                isDark
+                  ? 'bg-light-dark border-grey-white text-white'
+                  : 'bg-light-green'
+              }`}
               value={data?.description}
               onChangeText={e => handleChange('description', e)}
               maxLength={100}
             />
 
             <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
-              <Ionicons name='calendar' size={25} />
-              <Text className='font-doodle text-lg'>Date of lending</Text>
+              <Ionicons
+                name='calendar'
+                size={25}
+                color={isDark ? 'white' : 'black'}
+              />
+              <Text className={`font-doodle text-lg ${isDark && 'text-white'}`}>
+                Date of lending
+              </Text>
             </View>
 
             <TouchableOpacity
-              className='w-full h-16 border-2 rounded-md bg-light-green font-doodle text-xl flex justify-center p-2'
+              className={`w-full h-16 border-2 rounded-md font-doodle text-xl flex justify-center p-2 ${
+                isDark ? 'bg-light-dark border-grey-white' : 'bg-light-green'
+              }`}
               onPress={() => setOpenCalendar(!openCalendar)}
             >
-              <Text className='font-doodle text-lg'>
+              <Text className={`font-doodle text-lg ${isDark && 'text-white'}`}>
                 {new Date(data?.date.toString()).toDateString()}
               </Text>
             </TouchableOpacity>
@@ -188,7 +226,9 @@ const DebtMoneyTransaction = () => {
             <View className='w-full flex justify-center items-center mb-3 relative mt-3'>
               <View className='w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-black absolute right-3 top-1' />
               <TouchableOpacity
-                className='w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange'
+                className={`w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange ${
+                  isDark && 'border-grey-white'
+                }`}
                 onPress={handleSubmit}
               >
                 {loading ? (

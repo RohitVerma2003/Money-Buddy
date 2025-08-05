@@ -227,7 +227,9 @@ const LendMoneyTransaction = () => {
             <View className='w-full flex justify-center items-center mb-3 relative mt-3'>
               <View className='w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-black absolute right-3 top-1' />
               <TouchableOpacity
-                className='w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange'
+                className={`w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange ${
+                  isDark && 'border-grey-white'
+                }`}
                 onPress={handleSubmit}
               >
                 {loading ? (

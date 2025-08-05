@@ -13,6 +13,7 @@ import {
 import useAlert from '../../context/alertContext'
 import useCurrency from '../../context/currencyContext'
 import useMoneyPodTransaction from '../../context/moneyPodTransactionContext'
+import useTheme from '../../context/themeContext'
 import DropDown from '../components/DropDown'
 import Header from '../components/Header'
 import SplitMoneyPodForm from '../components/SplitMoneyPodForm'
@@ -28,7 +29,8 @@ const SplitTransaction = () => {
   const { sharedMoneyPodExpenseTransactionService } =
     useMoneyPodTransactionService()
   const { currency } = useCurrency()
-  const {showSuccessAlert , showDangerAlert} = useAlert()
+  const { showSuccessAlert, showDangerAlert } = useAlert()
+  const { isDark } = useTheme()
   const router = useRouter()
 
   const { podUid } = useLocalSearchParams()
@@ -133,10 +135,10 @@ const SplitTransaction = () => {
     if (result.success) {
       console.log(result)
       handleReset()
-      showSuccessAlert("Transaction added successfully...")
+      showSuccessAlert('Transaction added successfully...')
       router.back()
     } else {
-      showDangerAlert("Error in adding the transaction...")
+      showDangerAlert('Error in adding the transaction...')
     }
 
     setLoading(false)
@@ -150,13 +152,21 @@ const SplitTransaction = () => {
           <View className='w-full h-full'>
             {/* Total Amount Section */}
             <View className='flex flex-row items-center gap-1 mb-2'>
-              <Ionicons name='cash' size={25} />
-              <Text className='font-doodle text-lg'>
+              <Ionicons
+                name='cash'
+                size={25}
+                color={isDark ? 'white' : 'black'}
+              />
+              <Text className={`font-doodle text-lg ${isDark && 'text-white'}`}>
                 Total Amount ({currency})
               </Text>
             </View>
             <TextInput
-              className='w-full h-16 border-2 rounded-md bg-light-green font-doodle text-xl'
+              className={`w-full h-16 border-2 rounded-md font-doodle text-xl ${
+                isDark
+                  ? 'bg-light-dark border-grey-white text-white'
+                  : 'bg-light-green'
+              }`}
               keyboardType='decimal-pad'
               value={amount}
               onChangeText={e => {
@@ -174,8 +184,14 @@ const SplitTransaction = () => {
 
             {/* Category Section */}
             <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
-              <Ionicons name='pricetag' size={25} />
-              <Text className='font-doodle text-lg'>Category</Text>
+              <Ionicons
+                name='pricetag'
+                size={25}
+                color={isDark ? 'white' : 'black'}
+              />
+              <Text className={`font-doodle text-lg ${isDark && 'text-white'}`}>
+                Category
+              </Text>
             </View>
 
             <DropDown
@@ -201,9 +217,23 @@ const SplitTransaction = () => {
                 ) : null
               }}
               renderItem={(item, selected) => (
-                <View className='border-b-2 flex flex-row gap-2 px-2 items-center bg-light-green'>
-                  <Ionicons name={item.icon} size={30} />
-                  <Text className='font-doodle p-2 my-2 text-lg'>
+                <View
+                  className={`border-b-2 flex flex-row gap-2 px-2 items-center ${
+                    isDark
+                      ? 'bg-light-dark border-grey-white'
+                      : 'bg-light-green'
+                  }`}
+                >
+                  <Ionicons
+                    name={item.icon}
+                    size={30}
+                    color={isDark ? 'white' : 'black'}
+                  />
+                  <Text
+                    className={`font-doodle p-2 my-2 text-lg ${
+                      isDark && 'text-white'
+                    }`}
+                  >
                     {item.label}
                   </Text>
                 </View>
@@ -219,14 +249,22 @@ const SplitTransaction = () => {
             {/* Descripiton Section  */}
 
             <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
-              <Ionicons name='document' size={25} />
-              <Text className='font-doodle text-lg'>
+              <Ionicons
+                name='document'
+                size={25}
+                color={isDark ? 'white' : 'black'}
+              />
+              <Text className={`font-doodle text-lg ${isDark && 'text-white'}`}>
                 Descripiton <Text className='text-sm'>(Optional)</Text>
               </Text>
             </View>
 
             <TextInput
-              className='w-full h-16 border-2 rounded-md bg-light-green font-doodle text-xl'
+              className={`w-full h-16 border-2 rounded-md font-doodle text-xl ${
+                isDark
+                  ? 'bg-light-dark border-grey-white text-white'
+                  : 'bg-light-green'
+              }`}
               value={data?.description}
               onChangeText={e => handleChange('description', e)}
               maxLength={100}
@@ -235,17 +273,25 @@ const SplitTransaction = () => {
             {/* Date Section */}
 
             <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
-              <Ionicons name='calendar' size={25} />
-              <Text className='font-doodle text-lg'>Date</Text>
+              <Ionicons
+                name='calendar'
+                size={25}
+                color={isDark ? 'white' : 'black'}
+              />
+              <Text className={`font-doodle text-lg ${isDark && 'text-white'}`}>
+                Date
+              </Text>
             </View>
 
             {/* Calendar Section */}
 
             <TouchableOpacity
-              className='w-full h-16 border-2 rounded-md bg-light-green font-doodle text-xl flex justify-center p-2'
+              className={`w-full h-16 border-2 rounded-md font-doodle text-xl flex justify-center p-2 ${
+                isDark ? 'bg-light-dark border-grey-white' : 'bg-light-green'
+              }`}
               onPress={() => setOpenCalendar(!openCalendar)}
             >
-              <Text className='font-doodle text-lg'>
+              <Text className={`font-doodle text-lg ${isDark && 'text-white'}`}>
                 {new Date(data?.date.toString()).toDateString()}
               </Text>
             </TouchableOpacity>
@@ -267,17 +313,41 @@ const SplitTransaction = () => {
             {/* Shared People Section */}
 
             <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
-              <Ionicons name='people' size={25} />
-              <Text className='font-doodle text-lg'>Shared People</Text>
+              <Ionicons
+                name='people'
+                size={25}
+                color={isDark ? 'white' : 'black'}
+              />
+              <Text className={`font-doodle text-lg ${isDark && 'text-white'}`}>
+                Shared People
+              </Text>
             </View>
 
             <View className='w-full flex justify-center gap-2 mb-2'>
               <View className='w-full flex flex-row gap-2 justify-between'>
-                <View className='w-2/5 bg-light-green border-2 rounded-md h-16 flex justify-center p-2'>
-                  <Text className='text-lg font-doodle'>You</Text>
+                <View
+                  className={`w-2/5 border-2 rounded-md h-16 flex justify-center p-2 ${
+                    isDark
+                      ? 'bg-light-dark border-grey-white'
+                      : 'bg-light-green'
+                  }`}
+                >
+                  <Text
+                    className={`text-lg font-doodle ${isDark && 'text-white'}`}
+                  >
+                    You
+                  </Text>
                 </View>
-                <View className='w-2/5 bg-light-green border-2 rounded-md h-16 flex justify-center p-2'>
-                  <Text className='text-lg font-doodle'>
+                <View
+                  className={`w-2/5 border-2 rounded-md h-16 flex justify-center p-2 ${
+                    isDark
+                      ? 'bg-light-dark border-grey-white'
+                      : 'bg-light-green'
+                  }`}
+                >
+                  <Text
+                    className={`text-lg font-doodle ${isDark && 'text-white'}`}
+                  >
                     {calculateUserAmount()}
                   </Text>
                 </View>
@@ -300,7 +370,9 @@ const SplitTransaction = () => {
             <View className='w-full flex justify-center items-center mb-3 relative mt-3'>
               <View className='w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-black absolute right-3 top-1' />
               <TouchableOpacity
-                className='w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange'
+                className={`w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange ${
+                  isDark && 'border-grey-white'
+                }`}
                 onPress={handleSubmit}
               >
                 {loading ? (

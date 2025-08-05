@@ -13,6 +13,7 @@ import {
 import useAlert from '../../context/alertContext'
 import useCurrency from '../../context/currencyContext'
 import useMoneyPodTransaction from '../../context/moneyPodTransactionContext'
+import useTheme from '../../context/themeContext'
 import DropDown from '../components/DropDown'
 import Header from '../components/Header'
 import transactionConst from '../constants/transactions'
@@ -25,11 +26,13 @@ const transactionCategories = transactionConst?.transactionCategories
 
 const RegularMoneyPodTransaction = () => {
   const { data, handleChange, handleReset } = useMoneyPodTransaction()
-  const {regularMoneyPodExpenseTransactionService} = useMoneyPodTransactionService();
+  const { regularMoneyPodExpenseTransactionService } =
+    useMoneyPodTransactionService()
   const { currency } = useCurrency()
-  const {podUid} = useLocalSearchParams()
+  const { podUid } = useLocalSearchParams()
   const router = useRouter()
-  const {showSuccessAlert , showDangerAlert} = useAlert()
+  const { showSuccessAlert, showDangerAlert } = useAlert()
+  const { isDark } = useTheme()
 
   const [isFocus, setIsFocus] = useState(false)
   const [openCalendar, setOpenCalendar] = useState(false)
@@ -88,15 +91,18 @@ const RegularMoneyPodTransaction = () => {
       return
     }
 
-    const result = await regularMoneyPodExpenseTransactionService(formattedValue , podUid)
+    const result = await regularMoneyPodExpenseTransactionService(
+      formattedValue,
+      podUid
+    )
 
     if (result.success) {
       console.log(result)
       handleReset()
-      showSuccessAlert("Transaction added succesfully...")
+      showSuccessAlert('Transaction added succesfully...')
       router.back()
     } else {
-      showDangerAlert("Error in adding the transaction...")
+      showDangerAlert('Error in adding the transaction...')
     }
 
     setLoading(false)
@@ -109,11 +115,21 @@ const RegularMoneyPodTransaction = () => {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View className='w-full h-full'>
             <View className='flex flex-row items-center gap-1 mb-2'>
-              <Ionicons name='cash' size={25} />
-              <Text className='font-doodle text-lg'>Amount ({currency})</Text>
+              <Ionicons
+                name='cash'
+                size={25}
+                color={isDark ? 'white' : 'black'}
+              />
+              <Text className={`font-doodle text-lg ${isDark && 'text-white'}`}>
+                Amount ({currency})
+              </Text>
             </View>
             <TextInput
-              className='w-full h-16 border-2 rounded-md bg-light-green font-doodle text-xl'
+              className={`w-full h-16 border-2 rounded-md font-doodle text-xl ${
+                isDark
+                  ? 'bg-light-dark border-grey-white text-white'
+                  : 'bg-light-green'
+              }`}
               keyboardType='decimal-pad'
               value={amount}
               onChangeText={e => {
@@ -130,8 +146,14 @@ const RegularMoneyPodTransaction = () => {
             )}
 
             <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
-              <Ionicons name='swap-vertical' size={25} />
-              <Text className='font-doodle text-lg'>Type</Text>
+              <Ionicons
+                name='swap-vertical'
+                size={25}
+                color={isDark ? 'white' : 'black'}
+              />
+              <Text className={`font-doodle text-lg ${isDark && 'text-white'}`}>
+                Type
+              </Text>
             </View>
             <DropDown
               data={transactionType}
@@ -144,8 +166,14 @@ const RegularMoneyPodTransaction = () => {
                 setIsFocus(false)
               }}
               renderItem={(item, selected) => (
-                <View className='border-b-2 bg-light-green'>
-                  <Text className='font-doodle p-2 my-2 text-lg'>
+                <View
+                  className={`border-b-2 ${
+                    isDark
+                      ? 'bg-light-dark border-grey-white'
+                      : 'bg-light-green'
+                  }`}
+                >
+                  <Text className={`font-doodle p-2 my-2 text-lg ${isDark && 'text-white'}`}>
                     {item.label}
                   </Text>
                 </View>
@@ -153,8 +181,14 @@ const RegularMoneyPodTransaction = () => {
             />
 
             <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
-              <Ionicons name='pricetag' size={25} />
-              <Text className='font-doodle text-lg'>Category</Text>
+              <Ionicons
+                name='pricetag'
+                size={25}
+                color={isDark ? 'white' : 'black'}
+              />
+              <Text className={`font-doodle text-lg ${isDark && 'text-white'}`}>
+                Category
+              </Text>
             </View>
 
             <DropDown
@@ -180,9 +214,23 @@ const RegularMoneyPodTransaction = () => {
                 ) : null
               }}
               renderItem={(item, selected) => (
-                <View className='border-b-2 flex flex-row gap-2 px-2 items-center bg-light-green'>
-                  <Ionicons name={item.icon} size={30} />
-                  <Text className='font-doodle p-2 my-2 text-lg'>
+                <View
+                  className={`border-b-2 flex flex-row gap-2 px-2 items-center ${
+                    isDark
+                      ? 'bg-light-dark border-grey-white'
+                      : 'bg-light-green'
+                  }`}
+                >
+                  <Ionicons
+                    name={item.icon}
+                    size={30}
+                    color={isDark ? 'white' : 'black'}
+                  />
+                  <Text
+                    className={`font-doodle p-2 my-2 text-lg ${
+                      isDark && 'text-white'
+                    }`}
+                  >
                     {item.label}
                   </Text>
                 </View>
@@ -196,29 +244,45 @@ const RegularMoneyPodTransaction = () => {
             )}
 
             <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
-              <Ionicons name='document' size={25} />
-              <Text className='font-doodle text-lg'>
+              <Ionicons
+                name='document'
+                size={25}
+                color={isDark ? 'white' : 'black'}
+              />
+              <Text className={`font-doodle text-lg ${isDark && 'text-white'}`}>
                 Descripiton <Text className='text-sm'>(Optional)</Text>
               </Text>
             </View>
 
             <TextInput
-              className='w-full h-16 border-2 rounded-md bg-light-green font-doodle text-xl'
+              className={`w-full h-16 border-2 rounded-md font-doodle text-xl ${
+                isDark
+                  ? 'bg-light-dark border-grey-white text-white'
+                  : 'bg-light-green'
+              }`}
               value={data?.description}
               onChangeText={e => handleChange('description', e)}
               maxLength={100}
             />
 
             <View className='flex flex-row items-center gap-1 mb-2 mt-3'>
-              <Ionicons name='calendar' size={25} />
-              <Text className='font-doodle text-lg'>Date</Text>
+              <Ionicons
+                name='calendar'
+                size={25}
+                color={isDark ? 'white' : 'black'}
+              />
+              <Text className={`font-doodle text-lg ${isDark && 'text-white'}`}>
+                Date
+              </Text>
             </View>
 
             <TouchableOpacity
-              className='w-full h-16 border-2 rounded-md bg-light-green font-doodle text-xl flex justify-center p-2'
+              className={`w-full h-16 border-2 rounded-md font-doodle text-xl flex justify-center p-2 ${
+                isDark ? 'bg-light-dark border-grey-white' : 'bg-light-green'
+              }`}
               onPress={() => setOpenCalendar(!openCalendar)}
             >
-              <Text className='font-doodle text-lg'>
+              <Text className={`font-doodle text-lg ${isDark && 'text-white'}`}>
                 {new Date(data?.date.toString()).toDateString()}
               </Text>
             </TouchableOpacity>
@@ -240,7 +304,9 @@ const RegularMoneyPodTransaction = () => {
             <View className='w-full flex justify-center items-center mb-3 relative mt-3'>
               <View className='w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-black absolute right-3 top-1' />
               <TouchableOpacity
-                className='w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange'
+                className={`w-11/12 h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange ${
+                  isDark && 'border-grey-white'
+                }`}
                 onPress={handleSubmit}
               >
                 {loading ? (

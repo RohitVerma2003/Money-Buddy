@@ -36,12 +36,12 @@ const Profile = () => {
           <View className='w-full h-full mt-6'>
             <View className='w-full flex justify-center items-center mb-4 relative'>
               <View
-                className={`w-4/5 h-16 flex justify-center items-center border-2 rounded-md absolute right-9 top-1 ${
-                  isDark ? 'bg-light-dark border-light-dark' : 'bg-black'
-                }`}
+                className={`w-4/5 h-16 flex justify-center items-center border-2 rounded-md absolute right-9 top-1 bg-black`}
               />
               <TouchableOpacity
-                className='w-4/5 h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange'
+                className={`w-4/5 h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange ${
+                  isDark && 'border-grey-white'
+                }`}
                 onPress={() => router.push('/(modals)/EditProfile')}
               >
                 <Text className='font-flap-stick text-xl'>Edit Profile</Text>
@@ -49,12 +49,12 @@ const Profile = () => {
             </View>
             <View className='w-full flex justify-center items-center mb-4 relative'>
               <View
-                className={`w-4/5 h-16 flex justify-center items-center border-2 rounded-md absolute right-9 top-1 ${
-                  isDark ? 'bg-light-dark border-light-dark' : 'bg-black'
-                }`}
+                className={`w-4/5 h-16 flex justify-center items-center border-2 rounded-md absolute right-9 top-1 bg-black`}
               />
               <TouchableOpacity
-                className='w-4/5 h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange'
+                className={`w-4/5 h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange ${
+                  isDark && 'border-grey-white'
+                }`}
                 onPress={() => router.push('/(screens)/Settings')}
               >
                 <Text className='font-flap-stick text-xl'>Settings</Text>
@@ -62,22 +62,24 @@ const Profile = () => {
             </View>
             <View className='w-full flex justify-center items-center mb-4 relative'>
               <View
-                className={`w-4/5 h-16 flex justify-center items-center border-2 rounded-md absolute right-9 top-1 ${
-                  isDark ? 'bg-light-dark border-light-dark' : 'bg-black'
-                }`}
+                className={`w-4/5 h-16 flex justify-center items-center border-2 rounded-md absolute right-9 top-1 bg-black`}
               />
-              <TouchableOpacity className='w-4/5 h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange'>
+              <TouchableOpacity
+                className={`w-4/5 h-16 flex justify-center items-center border-2 rounded-md bg-vintage-orange ${
+                  isDark && 'border-grey-white'
+                }`}
+              >
                 <Text className='font-flap-stick text-xl'>Rate Us</Text>
               </TouchableOpacity>
             </View>
             <View className='w-full flex justify-center items-center relative'>
               <View
-                className={`w-4/5 h-16 flex justify-center items-center border-2 rounded-md absolute right-9 top-1 ${
-                  isDark ? 'bg-light-dark border-light-dark' : 'bg-black'
-                }`}
+                className={`w-4/5 h-16 flex justify-center items-center border-2 rounded-md absolute right-9 top-1 bg-black`}
               />
               <TouchableOpacity
-                className='w-4/5 h-16 flex justify-center items-center border-2 rounded-md bg-red-600'
+                className={`w-4/5 h-16 flex justify-center items-center border-2 rounded-md bg-red-600 ${
+                  isDark && 'border-grey-white'
+                }`}
                 onPress={() => logout()}
               >
                 <Text className='font-flap-stick text-xl'>Logout</Text>
