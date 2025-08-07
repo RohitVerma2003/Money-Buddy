@@ -1,10 +1,10 @@
 {
   "expo": {
-    "name": "money-buddy",
+    "name": "Money Buddy",
     "slug": "money-buddy",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/main_icon.png",
     "scheme": "moneybuddy",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,

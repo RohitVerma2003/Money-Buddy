@@ -41,7 +41,7 @@ export const AuthProvider = ({ children }) => {
             const keys = await AsyncStorage.getAllKeys();
             const filteredKeys = keys.filter(key => key !== 'theme');
 
-            return result;
+            return filteredKeys;
         } catch (e) {
             console.error('Error reading value', e);
         }
