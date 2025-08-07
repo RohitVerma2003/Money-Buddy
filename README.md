@@ -44,7 +44,16 @@ and many more....
   
 ## 📸 Screenshots
 
-- Adding Soon
+<p align="left" width="100%"> 
+  <img src="https://github.com/user-attachments/assets/889cab12-b693-4dd3-843e-1f83b8693cd8" width="250" /> 
+  <img src="https://github.com/user-attachments/assets/3cd5b189-dd27-4e26-b9b1-9bb85a5ddd16" width="250" /> 
+  <img src="https://github.com/user-attachments/assets/7d16d36e-dbf1-4439-ab22-0408c2859aff" width="250" /> <br /> 
+  <img src="https://github.com/user-attachments/assets/e5fa12fa-028c-4108-a831-6b83d53f955d" width="250" /> 
+  <img src="https://github.com/user-attachments/assets/5e3c02e2-84aa-443e-aa94-a821d73001ef" width="250" /> 
+  <img src="https://github.com/user-attachments/assets/e8df7178-d635-46ed-a4c6-896ef0b35a3a" width="250" /> 
+  <img src="https://github.com/user-attachments/assets/6a57789b-9276-4e36-9205-2bb69ca6a771" width="250" /> 
+</p>
+
 
 ## 🧠 Future Improvements
 - Recurring Transactions
