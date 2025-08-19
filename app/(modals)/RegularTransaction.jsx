@@ -49,7 +49,7 @@ const RegularTransaction = () => {
   }
 
   const handleBlurAmount = () => {
-    if (isValidAmount) {
+    if (isValidAmount()) {
       const num = parseFloat(amount)
       const formattedValue = num.toFixed(2)
       handleChange('amount', Number(formattedValue))

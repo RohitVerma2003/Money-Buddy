@@ -15,10 +15,11 @@ const ScreenWrapper = ({
       style={{
         paddingLeft: insets.left + 16,
         paddingRight: insets.right + 16,
-        paddingTop: 5
+        paddingTop: 5,
+        paddingBottom: insets.bottom
       }}
     >
-      <StatusBar barStyle={'default'} className={`${isDark ? 'bg-light-dark' : 'bg-' + bgColor}`} />
+      <StatusBar barStyle={isDark ? 'dark-content' : 'light-content'} className={`${isDark ? 'bg-light-dark' : 'bg-' + bgColor}`} />
       {children}
     </View>
   )

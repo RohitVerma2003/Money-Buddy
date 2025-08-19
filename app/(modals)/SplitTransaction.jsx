@@ -56,12 +56,10 @@ const SplitTransaction = () => {
     const sharedAmount = parseFloat(totalFriendAmount)
     const totalAmount = parseFloat(String(amount))
 
-    if (isNaN(totalAmount)) {
-      setError(prev => ({ ...prev, amount: 'Type a valid amount' }))
-      return -1
-    }
+    if (isNaN(totalAmount)) return '0.00'
 
-    return (totalAmount - sharedAmount).toFixed(2)
+    const result = totalAmount - sharedAmount
+    return result.toFixed(2)
   }
 
   const isValidAmount = () => {
@@ -73,7 +71,7 @@ const SplitTransaction = () => {
   }
 
   const handleBlurAmount = () => {
-    if (isValidAmount) {
+    if (isValidAmount()) {
       const num = parseFloat(amount)
       const formattedValue = num.toFixed(2)
       handleChange('amount', Number(formattedValue))
@@ -327,7 +325,9 @@ const SplitTransaction = () => {
                       : 'bg-light-green'
                   }`}
                 >
-                  <Text className={`text-lg font-doodle ${isDark && 'text-white'}`}>
+                  <Text
+                    className={`text-lg font-doodle ${isDark && 'text-white'}`}
+                  >
                     {calculateUserAmount()}
                   </Text>
                 </View>
